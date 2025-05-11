@@ -1,6 +1,7 @@
 import React from "react";
 import useHandleInputChangeAndSubmit from "../../../hooks/useHandleInputChangeAndSubmit";
 import {SigninContainer, FormContainer, FormElement, FormButton} from "./styles";
+import WelcomeModal from "../WelcomeModal";
 
 
 const Signin = () => {
@@ -16,6 +17,7 @@ const Signin = () => {
 
     return (
         <SigninContainer className="signinContainer">
+            <WelcomeModal show={showModal} onClose={() => setShowModal(false) } userName={userName} Message={"Registro Exitoso"} MessageOp={"Cargando catalogo..."} />
             <h1 style={{textAlign:'center', fontSize:"20px"}}>REGISTRARSE</h1>
             <FormContainer onSubmit={handleSubmitSigning}>
                 <FormElement>

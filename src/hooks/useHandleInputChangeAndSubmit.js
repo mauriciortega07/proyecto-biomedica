@@ -60,7 +60,7 @@ const useHandleInputChangeAndSubmit = () => {
             }));
             setUserName(name);
             setShowModal(true);
-            setTimeout(() => navigate("/Inicio"), 1500);
+            setTimeout(() => navigate("/Inicio"), 3000);
 
         }
     }
@@ -85,7 +85,7 @@ const useHandleInputChangeAndSubmit = () => {
             localStorage.setItem("user_session", JSON.stringify(validUsers));
             setUserName(validUsers.name);
             setShowModal(true);
-            setTimeout(() => navigate("/Inicio"), 1500);
+            setTimeout(() => navigate("/Inicio"), 3000);
 
 
 

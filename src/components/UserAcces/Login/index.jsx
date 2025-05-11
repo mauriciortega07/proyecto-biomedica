@@ -16,7 +16,7 @@ const Login = () => {
 
     return (
         <LoginContainer className="loginContainer">
-            <WelcomeModal show={showModal} onClose={() => setShowModal(false)} userName={userName}/>
+            <WelcomeModal show={showModal} onClose={() => setShowModal(false)} userName={userName} Message={"Bienvenido"} MessageOp={"Cargando catalogo..."}/>
             <h1 style={{textAlign:'center', fontSize:"20px"}}>INICIAR SESION</h1>
             <FormContainer onSubmit={handleSubmitLogin}>
                 <FormElement>

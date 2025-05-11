@@ -3,7 +3,7 @@ import  useGetUserSession  from "../../../hooks/useGetUserSession";
 import { Overlay, ModalContainer } from "./styles";
 
 
-const WelcomeModal = ({show, onClose, userName}) => {
+const WelcomeModal = ({show, onClose, userName, Message, MessageOp}) => {
     
     useEffect(() => {
         if(show) {
@@ -21,8 +21,8 @@ const WelcomeModal = ({show, onClose, userName}) => {
     return (
         <Overlay show={show}>
             <ModalContainer show={show}>
-                <h1>¡Bienvenido {userName}!</h1>
-                <p>Cargando el contenido...</p>
+                <h1>{Message} {userName}!</h1>
+                <p>{MessageOp}</p>
             </ModalContainer>
         </Overlay>
     )
