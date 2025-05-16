@@ -4,7 +4,7 @@ const HeaderContainer = styled.header`
     display: flex;
     justify-content: space-between;
     padding: 3rem;
-    gap: 20rem
+    gap: 15%;
 `
 
 const UserOptionsContainer = styled.div`

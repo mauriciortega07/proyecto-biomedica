@@ -3,7 +3,7 @@ const getEquiposBiomedicos = () => {
   
     const equiposBiomedicos = [
     {nombre: "Ventilador de Traslado Neonatal", 
-      descripcion: "Equipo electromecánico portátil controlado por microprocesador con batería interna, diseñado para soporte ventilatorio en pacientes neonatales durante traslados intra o extra-hospitalarios. Incluye pantalla que muestra gráficas, datos numéricos y alarmas.", 
+      descripcion: "Equipo electromecánico portátil controlado por microprocesador con batería interna, diseñado para soporte ventilatorio en pacientes neonatales\ndurante traslados intra o extra-hospitalarios.Incluye pantalla que muestra gráficas, datos numéricos y alarmas.", 
       nivelRiesgo: "Alto (Clase 3)",
       nomAplicada: " Mantenimiento preventivo y correctivo por personal calificado, conforme al manual de operación.",
       caracteristicas: ["Peso no mayor de 5 kg.", "Pantalla LCD de 5.5'' o mayor.", "Mezclador de aire-oxígeno interno.", "Sensor de flujo reusable.", "Duración de batería mínima de 5 horas."],
@@ -95,6 +95,16 @@ const getEquiposBiomedicos = () => {
     {nombre: "Tromboelastógrafo", 
       descripcion: "Equipo para identificar alteraciones en el proceso de coagulación y desórdenes trombóticos, que permite observar el curso de la fibrinolisis utilizando sangre completa.", 
       nivelRiesgo: "Alto (Clase 3)",
+      nomAplicada: "Mantenimiento preventivo y correctivo por personal calificado, conforme al manual de operación.",
+      caracteristicas: ["Sistema de viscoelasticidad que presenta valores en forma gráfica y numérica.","Visualización simultánea de dos trazos.","Capacidad de controlar la temperatura de cada columna."],
+      mantPreventivo: ["Limpieza y desinfección de componentes en contacto con muestras.","Calibración periódica del sistema según las especificaciones del fabricante.","Verificación del funcionamiento de los sensores y del sistema de análisis."],
+      mantCorrectivo: ["Reparación o reemplazo de componentes electrónicos o mecánicos defectuosos.","Actualización de software si aplica."],
+      img: "https://img.medicalexpo.es/images_me/photo-m2/95737-16457986.jpg"
+    },
+
+    {nombre: "Tromboelastógrafo", 
+      descripcion: "Equipo para identificar alteraciones en el proceso de coagulación y desórdenes trombóticos, que permite observar el curso de la fibrinolisis utilizando sangre completa.", 
+      nivelRiesgo: "Muy Alto (Clase 4)",
       nomAplicada: "Mantenimiento preventivo y correctivo por personal calificado, conforme al manual de operación.",
       caracteristicas: ["Sistema de viscoelasticidad que presenta valores en forma gráfica y numérica.","Visualización simultánea de dos trazos.","Capacidad de controlar la temperatura de cada columna."],
       mantPreventivo: ["Limpieza y desinfección de componentes en contacto con muestras.","Calibración periódica del sistema según las especificaciones del fabricante.","Verificación del funcionamiento de los sensores y del sistema de análisis."],

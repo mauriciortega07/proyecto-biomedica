@@ -16,7 +16,7 @@ const getUserSession = () => {
         return (
             <UserOptionsContainer>
                 <i style={{width:"5%"}}><img alt='IconoDeUsuario' style={{width:"100%"}} src={(iconUser)}></img></i>
-                <h1 style={{fontSize:"17px"}}>{userSession.name}</h1>
+                <h1 style={{fontSize:"clamp(1vw, 1rem, 2vw)"}}>{userSession.name}</h1>
                 <i style={{width:"11%", cursor:"pointer"}}><img alt='IconoDeCerrarSesion' style={{width:"100%"}} src={(iconSignout)} onClick={(handleSignOut)}></img></i>
             </UserOptionsContainer>
         )
@@ -37,8 +37,8 @@ const handleSignOut = () => {
 
 return (
     <HeaderContainer>
-        <div style={{width:'20%'}}>
-            <img src={(inpLogo)} style={{width:'100%'}}></img>
+        <div style={{width:'15em'}}>
+            <img src={(inpLogo)} style={{width:'15em'}}></img>
         </div>
         {getUserSession()}
     </HeaderContainer>
