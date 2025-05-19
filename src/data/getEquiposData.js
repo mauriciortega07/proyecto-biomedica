@@ -1,5 +1,12 @@
 import getEquiposBiomedicos from "./getEquiposBiomedicos";
 
+function asignarIds(equipos) {
+  return equipos.map((equipo, idx) => ({
+    ...equipo,
+    id: equipo.id || `${equipo.nombre}-${equipo.nivelRiesgo}-${idx}-${Date.now()}`
+  }));
+}
+
 export function getEquiposData() {
   const data = localStorage.getItem('equiposBiomedicos');
   console.log("getEquiposData - datos en localStorage:", data);
@@ -14,9 +21,11 @@ export function getEquiposData() {
       localStorage.setItem("equiposBiomedicos", JSON.stringify(equiposIniciales));
       return equiposIniciales;
     }
-    return parsedData;
+    const equiposConId = asignarIds(parsedData);
+    localStorage.setItem("equiposBiomedicos", JSON.stringify(equiposConId));
+    return equiposConId;
   } else {
-    const equiposIniciales = getEquiposBiomedicos();
+    const equiposIniciales = asignarIds(getEquiposBiomedicos());
     console.log("getEquiposData - cargando datos base:", equiposIniciales);
     localStorage.setItem("equiposBiomedicos", JSON.stringify(equiposIniciales));
     return equiposIniciales;

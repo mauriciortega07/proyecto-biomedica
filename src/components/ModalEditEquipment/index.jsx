@@ -55,16 +55,23 @@ const ModalEditEquipment = ({equipoAEditar, modalEditEquipment, setModalEditEqui
 
     const handleSave = () => {
         setMensajeConfirmacion("Equipo Editado con Exito");
+        
+        const userSession = JSON.parse(localStorage.getItem("user_session"));
+        const nombreUsuarioEnSesion = userSession?.name || "Anonimo";
+        
         const updateEquipo =  {
                 ...equipoEditado,
                 caracteristicas: equipoEditado.caracteristicas.split('\n').filter(Boolean),
                 mantPreventivo: equipoEditado.mantPreventivo.split('\n').filter(Boolean),
-                mantCorrectivo: equipoEditado.mantCorrectivo.split('\n').filter(Boolean)
+                mantCorrectivo: equipoEditado.mantCorrectivo.split('\n').filter(Boolean),
+                editadoPor: nombreUsuarioEnSesion,
+                fechaModificacion: new Date().toLocaleString()
         };
+
 
         setEquiposIniciales(
             prevEquipos => prevEquipos.map(equipo => 
-                equipo.nombre == equipoAEditar.nombre ? updateEquipo : equipo
+                equipo.id == equipoAEditar.id ? updateEquipo : equipo
             )
         
         );

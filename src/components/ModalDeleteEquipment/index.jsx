@@ -10,7 +10,7 @@ const ModalDeleteEquipment = ({ equipoAEliminar, setModalDeleteEquipment, equipo
     const [confirmar, setConfirmar] = useState(false);
 
     const handleDeleteEquipment = () => {
-        const nuevaLista = equiposIniciales.filter(equipo => equipo !== equipoAEliminar);
+        const nuevaLista = equiposIniciales.filter(equipo => equipo.id !== equipoAEliminar.id);
         setEquiposIniciales(nuevaLista);
         setConfirmar(true);
     };

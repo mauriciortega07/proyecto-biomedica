@@ -38,11 +38,18 @@ const ModalNewEquipment = ( {equiposIniciales = [], setEquiposIniciales, mostrar
 
     const agregarEquipo = (e) => {
         e.preventDefault();
+
+        const userSession = JSON.parse(localStorage.getItem("user_session"));
+        const nombreUsuarioEnSesion = userSession?.name || "Anonimo";
+
         const nuevo = {
             ...nuevoEquipo,
+            id: `${nuevoEquipo.nombre}-${nuevoEquipo.nivelRiesgo}-${Date.now()}`,
             caracteristicas: parseList(nuevoEquipo.caracteristicas),
             mantPreventivo: parseList(nuevoEquipo.mantPreventivo),
-            mantCorrectivo: parseList(nuevoEquipo.mantCorrectivo)
+            mantCorrectivo: parseList(nuevoEquipo.mantCorrectivo),
+            agregadoPor: nombreUsuarioEnSesion,
+            fechaAgregado: new Date().toLocaleString()
         };
 
         setEquiposIniciales(prev => [...prev, nuevo]);

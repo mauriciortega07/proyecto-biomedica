@@ -5,6 +5,19 @@ const HeaderContainer = styled.header`
     justify-content: space-between;
     padding: 3rem;
     gap: 15%;
+    
+    
+
+    div {
+    transition: transform .2s;
+        cursor: pointer;
+    
+    &:hover {
+        
+        transform: scale(1.1);
+        }
+    }
+    
 `
 
 const UserOptionsContainer = styled.div`

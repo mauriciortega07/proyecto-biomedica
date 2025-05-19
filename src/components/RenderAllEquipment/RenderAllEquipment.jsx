@@ -21,7 +21,7 @@ const IconColor = {
 
 
 
-const RenderAllEquipment = ({ busqueda, equiposIniciales, setEquiposIniciales }) => {
+const RenderAllEquipment = ({ busqueda, equiposAMostrar, equiposIniciales, setEquiposIniciales }) => {
     console.log(equiposIniciales)
     //ESTADOS DEL MODAL EDITAR EQUIPO
     const [modalEditEquipment, setModalEditEquipment] = useState(false);
@@ -29,10 +29,10 @@ const RenderAllEquipment = ({ busqueda, equiposIniciales, setEquiposIniciales })
 
     //ESTADOS DEL MODAL ELIMINAR EQUIPO
     const [modalDeleteEquipment, setModalDeleteEquipment] = useState(false);
-    const[equipoAEliminar, setEquipoAEliminar] = useState(null);
+    const [equipoAEliminar, setEquipoAEliminar] = useState(null);
 
     //FUNCION QUE FILTRA LOS EQUIPOS POR NOMBRE O NIVEL DE RIESGO
-    const equiposBuscar = busqueda.toLowerCase();
+    /*const equiposBuscar = busqueda.toLowerCase();
     const equiposEncontrados = equiposIniciales.filter(
         equipo =>
             (equipo.nombre?.toLowerCase() || '').includes(equiposBuscar) || 
@@ -44,6 +44,13 @@ const RenderAllEquipment = ({ busqueda, equiposIniciales, setEquiposIniciales })
     const equiposAMostrar = busqueda === "" ? equiposIniciales : equiposEncontrados;
 
     if (busqueda !== "" && equiposEncontrados.length === 0) {
+        return (
+            <ContainerMsgNotFound>
+                <label>No se encontraron resultados</label>
+            </ContainerMsgNotFound>
+        );
+    }*/
+    if (equiposAMostrar.length === 0) {
         return (
             <ContainerMsgNotFound>
                 <label>No se encontraron resultados</label>
@@ -66,7 +73,7 @@ const RenderAllEquipment = ({ busqueda, equiposIniciales, setEquiposIniciales })
                         //const {nombre, descripcion, nivelRiesgo, nomAplicada, caracteristicas, mantPreventivo, mantCorrectivo} = equipo;
 
                         return (
-                            <CardEquipos key={i}>
+                            <CardEquipos key={equipo.id || i}>
                                 <CardEquiposImgContainer>
                                     <img style={{ width: "350px", height: "350px", objectFit: "cover" }} src={equipo.img} />
                                 </CardEquiposImgContainer>
@@ -111,6 +118,31 @@ const RenderAllEquipment = ({ busqueda, equiposIniciales, setEquiposIniciales })
                                             </ul>
                                         </dd>
 
+                                        {equipo.editadoPor && (
+                                            <p style={{ fontStyle: "italic", fontSize: "0.9rem" }}>
+                                                Editado por: <strong>{equipo.editadoPor}</strong>
+                                            </p>
+                                        )}
+
+                                        {equipo.fechaModificacion && (
+                                            <p style={{ fontStyle: "italic", fontSize: "0.8rem", color: "#666" }}>
+                                                Última edición: {equipo.fechaModificacion}
+                                            </p>
+                                        )}
+
+                                        {equipo.agregadoPor && (
+                                            <p style={{fontStyle: "italic", fontSize: "0.9rem"}}>
+                                                Agregado por: {equipo.agregadoPor}
+                                            </p>
+                                        )}
+
+                                        {equipo.fechaAgregado && (
+                                            <p style={{fontStyle: "italic", fontSize: "0.8rem", color: "#666" }}>
+                                                Agregado el: {equipo.fechaAgregado}
+                                            </p>
+                                        )}
+
+
 
                                         <section style={{ padding: "1rem" }}>
                                             <div style={{ display: "flex", justifyContent: "space-between" }}>
@@ -120,7 +152,7 @@ const RenderAllEquipment = ({ busqueda, equiposIniciales, setEquiposIniciales })
                                                 }}>Editar Equipo</ButtonEdit>
                                                 <ButtonDelete onClick={() => {
                                                     setModalDeleteEquipment(true)
-                                                    setEquipoAEliminar(equipo)  
+                                                    setEquipoAEliminar(equipo)
                                                 }}>Eliminar Equipo</ButtonDelete>
                                             </div>
                                         </section>
@@ -139,10 +171,10 @@ const RenderAllEquipment = ({ busqueda, equiposIniciales, setEquiposIniciales })
                     <ModalEditEquipment
                         equipoAEditar={equipoAEditar}
                         modalEditEquipment={modalEditEquipment}
-                        setModalEditEquipment={setModalEditEquipment} 
+                        setModalEditEquipment={setModalEditEquipment}
                         setEquiposIniciales={setEquiposIniciales}
-                        />
-                        
+                    />
+
 
                 )
             }
@@ -150,8 +182,8 @@ const RenderAllEquipment = ({ busqueda, equiposIniciales, setEquiposIniciales })
             {/*MODAL ELIMINAR EQUIPO (SE ABRE CON EL BOTON DE ELIMINAR) */}
             {
                 modalDeleteEquipment && equipoAEliminar && (
-                    <ModalDeleteEquipment 
-                        equipoAEliminar = {equipoAEliminar}
+                    <ModalDeleteEquipment
+                        equipoAEliminar={equipoAEliminar}
                         setModalDeleteEquipment={setModalDeleteEquipment}
                         equiposIniciales={equiposIniciales}
                         setEquiposIniciales={setEquiposIniciales}

@@ -34,7 +34,7 @@ const SearchContainer = styled.div `
 `
 
 const ButtonRegister = styled.button`
-     background-color: #566de6;
+  background-color: #566de6;
   color: white;
   padding: 10px 20px;
   font-size: 16px;
