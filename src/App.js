@@ -12,7 +12,7 @@ function App() {
   return (
     <ThemeProvider theme={Theme}>
       <GlobalStyles />      
-      <div className="App">
+      <div className="App" style={{display: "grid", minHeight: "100dvh", gridTemplateRows: "auto 1fr auto"}}>
         <Routes>
           <Route path="/" element={<UserAcces logoImg={LogoEmpresa} />} />
           <Route path="/Inicio" element={<TodosEquipos equiposBiomedicos={equiposBiomedicos}/>} />

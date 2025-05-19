@@ -40,7 +40,7 @@ const UserAcces = ({ logoImg }) => {
                 </section>
             </UserAccesMain>
            
-           <Footer /> 
+           <Footer logoImg={logoImg}/> 
         </>
 
     )

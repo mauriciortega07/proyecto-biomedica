@@ -6,6 +6,14 @@ const HeaderLogin = styled.header`
 const HeaderLogin_div = styled.div`
     width: 26%;
     margin: auto;
+    transition: transform .2s;
+    cursor: pointer;
+     
+    &:hover {
+        
+        transform: scale(1.1);
+        }
+    
 `
 
 const HeaderLogin_img = styled.img`

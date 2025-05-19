@@ -11,7 +11,7 @@ const TodosEquipos = ({equiposBiomedicos}) => {
         <>
             <Header />
             <MainContent equiposBiomedicos={equiposBiomedicos} />
-            <Footer />
+            <Footer/>
         </>
 
     )
