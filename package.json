@@ -16,8 +16,8 @@
     "web-vitals": "^2.1.4"
   },
   "resolutions": {
-    "styled-components": "^6.1.17",
-    "styled-reset/styled-components": "^6.1.17"
+    "styled-components": "6.1.17",
+    "styled-reset/styled-components": "6.1.17"
   },
   "scripts": {
     "preinstall": "npx npm-force-resolutions",
