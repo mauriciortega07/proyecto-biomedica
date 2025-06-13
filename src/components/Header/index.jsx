@@ -1,6 +1,6 @@
 import iconUser from '../../utilities/icons/user (1).svg';
 import iconSignout from '../../utilities/icons/sign-out_6461685.png';
-import inpLogo from '../../utilities/logos/inp-logo.png';
+import inpLogo from '../../utilities/logos/Ibiomedico.png';
 import { useNavigate } from 'react-router-dom'; 
 import { HeaderContainer, UserOptionsContainer } from './styles';
 
@@ -38,7 +38,7 @@ const handleSignOut = () => {
 return (
     <HeaderContainer>
         <div style={{width:'15em'}}>
-            <img src={(inpLogo)} style={{width:'15em'}}></img>
+            <img src={(inpLogo)} style={{width:'7em'}}></img>
         </div>
         {getUserSession()}
     </HeaderContainer>

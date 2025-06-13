@@ -7,10 +7,12 @@ import { ContainerEquipos, MainContainer, TitleCatalogo, SearchContainer, Button
 //import getEquiposBiomedicos from "../../../data/getEquiposBiomedicos";
 import { getEquiposData } from "../../data/getEquiposData";
 import RenderAllEquipment from "../RenderAllEquipment/RenderAllEquipment";
+import ModalFilterEquipment from "../ModalFilterEquipment";
 
 const MainContent = ({ equiposBiomedicos }) => {
     const [equiposIniciales, setEquiposIniciales] = useState(equiposBiomedicos);
     const [mostrarModal, setMostrarModal] = useState(false);
+    const [mostrarModalEquiposPorFiltro, setMostrarModalEquiposPorFiltro] = useState(false);
     const [categoriaSeleccionada, setCategoriaSeleccionada] = useState("Todos");
     
 
@@ -64,6 +66,7 @@ const MainContent = ({ equiposBiomedicos }) => {
                 <SearchContainer >
                     <SearchBox busqueda={busqueda} handleInputChange={handleInputChange} />
                     <ButtonRegister onClick={() => setMostrarModal(true)} >+ Agregar Equipo</ButtonRegister>
+                    <ButtonRegister onClick={() => setMostrarModalEquiposPorFiltro(true)} >Agregar Equipo Mediante Toma de Decision</ButtonRegister>
                 </SearchContainer>
 
                 {/*GRID DE EQUIPOS */}
@@ -71,6 +74,9 @@ const MainContent = ({ equiposBiomedicos }) => {
 
                 {/*MODAL PARA EDITAR EQUIPOS*/}
                 <ModalNewEquipment equiposIniciales={equiposIniciales} setEquiposIniciales={setEquiposIniciales} mostrarModal={mostrarModal} setMostrarModal={setMostrarModal} />
+
+                {/*MODAL PARA AGREGAR EQUIPOS MEDIANTE TOMA DE DECISIONES*/}
+                <ModalFilterEquipment mostrarModalEquiposPorFiltro={mostrarModalEquiposPorFiltro} setMostrarModalEquiposPorFiltro={setMostrarModalEquiposPorFiltro} setEquiposIniciales={setEquiposIniciales}/>
             </ContainerEquipos>
         </MainContainer>
 

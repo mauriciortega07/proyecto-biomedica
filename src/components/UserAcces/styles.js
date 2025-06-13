@@ -4,7 +4,7 @@ const HeaderLogin = styled.header`
     padding: 2rem;`
 
 const HeaderLogin_div = styled.div`
-    width: 26%;
+    width: 20%;
     margin: auto;
     transition: transform .2s;
     cursor: pointer;

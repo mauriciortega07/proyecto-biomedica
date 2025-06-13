@@ -146,7 +146,7 @@ return (
                     <dt><ImagePlus size={20} color={IconColor.imagePlus} style={{margin:"0px 10px"}}/>Imagen del Equipo: </dt>
                     <FormField 
                         name="img"
-                        placeholder="link de la imagen del dispositivo"
+                        placeholder="https://..."
                         value={nuevoEquipo.img}
                         onChange={handleCambio}
                         required

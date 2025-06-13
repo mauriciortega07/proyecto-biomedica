@@ -168,7 +168,7 @@ const ModalEditEquipment = ({equipoAEditar, modalEditEquipment, setModalEditEqui
                     />
                 )}
 
-                {mensajeConfirmacion && <p style={{color:"green", marginBottom:"1rem ", textAlign:"center", fontWeight:"bolder"}}>Equipo Agregado con Exito</p>}
+                {mensajeConfirmacion && <p style={{color:"green", marginBottom:"1rem ", textAlign:"center", fontWeight:"bolder"}}>{mensajeConfirmacion}</p>}
                 <ButtonsContainer>
                     <ButtonCancelled onClick={handleClose}>Cancelar</ButtonCancelled>
                     <ButtonSaveEquipment onClick={handleSave}>Guardar Cambios</ButtonSaveEquipment>
