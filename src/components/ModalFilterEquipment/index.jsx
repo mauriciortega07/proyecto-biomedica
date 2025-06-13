@@ -4,7 +4,10 @@ import {
     FormField,
     TextArea,
     TitleModal,
-    ButtonStartEquipment
+    ButtonStartEquipment,
+    ButtonYes,
+    ButtonRestart,
+    ButtonOther
 } from "./styles";
 import { useState } from "react";
 const IconColor = {
@@ -821,21 +824,21 @@ const ModalFilterEquipment = ({ mostrarModalEquiposPorFiltro, setMostrarModalEqu
                     </>
                 ) : !resultado ? (
                     <>
-                        <h3>Equipo: {equipo}</h3>
-                        <h2>{hiloActual.question}</h2>
+                        <TitleModal>Equipo: {equipo}</TitleModal>
+                        <h2 style={{margin:"1rem 0rem"}}>{hiloActual.question}</h2>
                         {hiloActual.options.map((option, index) => (
-                            <button key={index} onClick={() => handleOpcionClick(option)}>
+                            <ButtonYes key={index} onClick={() => handleOpcionClick(option)}>
                                 {option.label}
-                            </button>
+                            </ButtonYes>
                         ))}
-                        <button onClick={handleReiniciarArbol}>Reiniciar</button>
+                        <ButtonRestart onClick={handleReiniciarArbol}>Reiniciar</ButtonRestart>
                     </>
                 ) : (
                     <>
-                        <h3>Equipo: {equipo}</h3>
-                        <h2>Resultado final: {resultado}</h2>
-                        <button onClick={handleReiniciarArbol}>Evaluar Otro</button>
-                        <button onClick={handleReiniciarArbol}>Reiniciar</button>
+                        <TitleModal>Equipo: {equipo}</TitleModal>
+                        <TitleModal>Resultado final: {resultado}</TitleModal>
+                        <ButtonOther onClick={handleReiniciarArbol}>Evaluar Otro</ButtonOther>
+                        <ButtonRestart onClick={handleReiniciarArbol}>Reiniciar</ButtonRestart>
                     </>
                 )
 

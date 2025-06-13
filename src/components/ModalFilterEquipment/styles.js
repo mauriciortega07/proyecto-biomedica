@@ -53,7 +53,7 @@ const TextArea = styled.textarea`
 `
 
 const ButtonStartEquipment = styled.button`
-    background-color:rgb(211, 59, 87);
+    background-color:rgb(59, 120, 211);
     color: white;
     padding: 10px 20px;
     font-size: 16px;
@@ -63,9 +63,39 @@ const ButtonStartEquipment = styled.button`
     font-weight: 500;
     transition: background-color 0.3s, box-shadow 0.3s;
 
-     &:disabled {
+    &:disabled {
     background-color:rgba(161, 161, 161, 0.3);
     box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+    color: black;
+  }
+
+  &:hover {
+    background-color:rgba(83, 78, 1, 0.63);
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+    color: black;
+  }
+  &:active {
+    transform: scale(0.98);
+  }
+
+
+`
+
+const ButtonYes = styled.button`
+    background-color:rgb(214, 87, 87);
+    color: white;
+    padding: 10px 20px;
+    font-size: 16px;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    font-weight: 500;
+    transition: background-color 0.3s, box-shadow 0.3s;
+    margin: 1rem;
+
+    &:hover {
+    background-color:rgba(14, 70, 113, 0.84);
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.47);
     color: white;
   }
 
@@ -75,12 +105,63 @@ const ButtonStartEquipment = styled.button`
 
 
 `
+
+const ButtonOther = styled.button`
+    background-color:rgb(64, 132, 76);
+    color: white;
+    padding: 10px 20px;
+    font-size: 16px;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    font-weight: 500;
+    transition: background-color 0.3s, box-shadow 0.3s;
+    margin: 1rem;
+
+    &:hover {
+    background-color:rgba(112, 168, 17, 0.7);
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+    color: white;
+  }
+
+  &:active {
+    transform: scale(0.98);
+  }
+
+`
+
+const ButtonRestart = styled.button`
+    background-color:rgb(59, 82, 211);
+    color: white;
+    padding: 10px 20px;
+    font-size: 16px;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    font-weight: 500;
+    transition: background-color 0.3s, box-shadow 0.3s;
+
+    &:hover {
+    background-color:rgba(255, 9, 9, 0.7);
+    box-shadow: 0 4px 10px rgb(255, 4, 4);
+    color: white;
+  }
+
+  &:active {
+    transform: scale(0.98);
+  }
+
+`
+
 export {
     ModalBackground,
     ModalContent,
     FormField,
     TextArea,
     TitleModal,
-    ButtonStartEquipment
-    
+    ButtonStartEquipment,
+    ButtonYes,
+    ButtonOther,
+    ButtonRestart
+
 }
