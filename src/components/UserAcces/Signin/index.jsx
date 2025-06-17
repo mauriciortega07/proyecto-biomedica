@@ -59,7 +59,7 @@ const Signin = () => {
                     />
                 </FormElement>
 
-                <FormElement>
+                {/*<FormElement>
                     <label for="email">correo: </label>
                     <input
                         id="email"
@@ -70,7 +70,7 @@ const Signin = () => {
                         placeholder="ingresa tu correo"
                         required
                     />
-                </FormElement>
+                </FormElement>*/}
 
                 <FormElement>
                     <label for="password">contraseña</label>

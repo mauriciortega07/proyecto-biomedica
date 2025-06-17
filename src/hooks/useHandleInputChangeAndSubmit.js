@@ -7,7 +7,7 @@ const useHandleInputChangeAndSubmit = () => {
         name: "",
         idempleado: "",
         rolempleado: "",
-        email: "",
+        //email: "",
         password: "",
     })
 
@@ -26,7 +26,7 @@ const useHandleInputChangeAndSubmit = () => {
     const handleSubmitSigning = (e) => {
         e.preventDefault();
 
-        const { name, idempleado, rolempleado, email, password } = form;
+        const { name, idempleado, rolempleado, /*email ,*/ password } = form;
         const Users = JSON.parse(localStorage.getItem("users") || "[]");
         const isUserRegistered = Users.find((user) => user.idempleado === idempleado);
 
@@ -36,7 +36,7 @@ const useHandleInputChangeAndSubmit = () => {
                 name: "",
                 idempleado: "",
                 rolempleado: "",
-                email: "",
+                //email: "",
                 password: "",  
             })
             navigate("/");
@@ -45,7 +45,7 @@ const useHandleInputChangeAndSubmit = () => {
                 name: name,
                 idempleado: idempleado,
                 rolempleado: rolempleado,
-                email: email,
+                //email: email,
                 password: password
             });
 
@@ -55,7 +55,7 @@ const useHandleInputChangeAndSubmit = () => {
                 name: name,
                 idempleado: idempleado,
                 rolempleado: rolempleado,
-                email: email,
+                //email: email,
                 password: password
             }));
             setUserName(name);
