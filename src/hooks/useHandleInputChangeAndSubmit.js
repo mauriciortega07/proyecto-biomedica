@@ -27,7 +27,7 @@ const useHandleInputChangeAndSubmit = () => {
         e.preventDefault();
 
         try {
-            const response = await fetch("http://localhost:4000/register", {
+            const response = await fetch("https://backend-proyecto-biomedica-production.up.railway.app/register", {
                 method: "POST",
                 headers: { "Content-Type": "application/json" },
                 credentials: "include",
@@ -56,7 +56,7 @@ const useHandleInputChangeAndSubmit = () => {
         e.preventDefault();
 
         try {
-            const response = await fetch("http://localhost:4000/login", {
+            const response = await fetch("https://backend-proyecto-biomedica-production.up.railway.app/login", {
                 method: "POST",
                 headers: { "Content-Type": "application/json" },
                 credentials: "include",
