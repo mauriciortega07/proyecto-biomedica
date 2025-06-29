@@ -5,37 +5,57 @@ import useSearchBox from "../../../src/hooks/useSearchBox";
 import ModalNewEquipment from "../../components/ModalNewEquipment"
 import { ContainerEquipos, MainContainer, TitleCatalogo, SearchContainer, ButtonRegister } from "./styles";
 //import getEquiposBiomedicos from "../../../data/getEquiposBiomedicos";
-import { getEquiposData } from "../../data/getEquiposData";
+//import { getEquiposData } from "../../data/getEquiposData";
 import RenderAllEquipment from "../RenderAllEquipment/RenderAllEquipment";
 import ModalFilterEquipment from "../ModalFilterEquipment";
+import useEquiposBiomedicos from "../../data/useEquiposBiomedicos"
 
-const MainContent = ({ equiposBiomedicos }) => {
-    const [equiposIniciales, setEquiposIniciales] = useState(equiposBiomedicos);
+const MainContent = ({ equiposBiomedicos, setEquiposBiomedicos }) => {
+    //const [equiposIniciales, setEquiposIniciales] = useState(equiposBiomedicos);
     const [mostrarModal, setMostrarModal] = useState(false);
     const [mostrarModalEquiposPorFiltro, setMostrarModalEquiposPorFiltro] = useState(false);
     const [categoriaSeleccionada, setCategoriaSeleccionada] = useState("Todos");
-    
+
+
 
     //CRAGA DATOS DESDE EL LOCALSTORAGE
-    useEffect(() => {
+    /*useEffect(() => {
         const datosGuardados = getEquiposData();
         console.log("TodosEquipos - datos guardados:", datosGuardados);
         setEquiposIniciales(datosGuardados);
-    }, [])
+    }, []) 
 
     //SINCRONIZAR EL LOCALSTORAGE CON LOS CMABIOS QUE SE HAGAN
     useEffect(() => {
         localStorage.setItem("equiposBiomedicos", JSON.stringify(equiposIniciales));
-    }, [equiposIniciales])
+    }, [equiposIniciales]) */
+
+    // Función para convertir texto multilinea a array
+    function parseMultilineString(text) {
+        if (typeof text !== "string") return [];
+        return text
+            .split("\n")
+            .map(line => line.trim())
+            .filter(Boolean);
+    }
+
+    // Normalizar datos para convertir strings multilinea en arrays
+    const equiposNormalizados = equiposBiomedicos.map(equipo => ({
+        ...equipo,
+        caracteristicas: parseMultilineString(equipo.caracteristicas),
+        mantPreventivo: parseMultilineString(equipo.mantPreventivo),
+        mantCorrectivo: parseMultilineString(equipo.mantCorrectivo),
+    }));
 
 
+    //SINCRONIZA LAS CATEGORIAS CUANDO SE ELIMINAN O SE GAREGA UNA NUEVA
     useEffect(() => {
         if (categoriaSeleccionada === "Todos") return;
-        const categoriasActuales = equiposIniciales.map(e => e.nivelRiesgo);
+        const categoriasActuales = equiposBiomedicos.map(e => e.nivelRiesgo);
         if (!categoriasActuales.includes(categoriaSeleccionada)) {
             setCategoriaSeleccionada("Todos");
         }
-    }, [equiposIniciales, categoriaSeleccionada]);
+    }, [equiposBiomedicos, categoriaSeleccionada]);
 
 
     //HOOK PERSONALIZADO QUE REALIZA LA FUNCION DE BUSQUEDA DE EQUIPOS POR NOMBRE O NIVEL DE RIESGO(CATEGORIA)
@@ -44,8 +64,8 @@ const MainContent = ({ equiposBiomedicos }) => {
 
     //FILTRADO POR CATEGORIA
     const equiposFiltrados = categoriaSeleccionada === "Todos"
-        ? equiposIniciales
-        : equiposIniciales.filter(equipo => equipo.nivelRiesgo === categoriaSeleccionada);
+        ? equiposBiomedicos
+        : equiposBiomedicos.filter(equipo => equipo.nivelRiesgo === categoriaSeleccionada);
 
     //FILTRADO POR BUSQUEDA
     const equiposBuscar = busqueda.toLowerCase();
@@ -58,7 +78,7 @@ const MainContent = ({ equiposBiomedicos }) => {
         )
     return (
         <MainContainer >
-            <AsideCategories listaEquipos={equiposIniciales} onCategoriaSeleccionada={setCategoriaSeleccionada} categoriaSeleccionada={categoriaSeleccionada}/>
+            <AsideCategories listaEquipos={equiposBiomedicos} onCategoriaSeleccionada={setCategoriaSeleccionada} categoriaSeleccionada={categoriaSeleccionada} />
             <ContainerEquipos>
                 <TitleCatalogo >CATALOGO DE TODOS LOS EQUIPOS</TitleCatalogo>
 
@@ -70,13 +90,13 @@ const MainContent = ({ equiposBiomedicos }) => {
                 </SearchContainer>
 
                 {/*GRID DE EQUIPOS */}
-                <RenderAllEquipment busqueda={busqueda} equiposAMostrar={equiposAMostrar} equiposIniciales={equiposIniciales} setEquiposIniciales={setEquiposIniciales} />
+                <RenderAllEquipment busqueda={busqueda} equiposAMostrar={equiposAMostrar} equiposIniciales={equiposNormalizados} setEquiposIniciales={setEquiposBiomedicos} />
 
                 {/*MODAL PARA EDITAR EQUIPOS*/}
-                <ModalNewEquipment equiposIniciales={equiposIniciales} setEquiposIniciales={setEquiposIniciales} mostrarModal={mostrarModal} setMostrarModal={setMostrarModal} />
+                <ModalNewEquipment equiposIniciales={equiposNormalizados} setEquiposIniciales={setEquiposBiomedicos} mostrarModal={mostrarModal} setMostrarModal={setMostrarModal} />
 
                 {/*MODAL PARA AGREGAR EQUIPOS MEDIANTE TOMA DE DECISIONES*/}
-                <ModalFilterEquipment mostrarModalEquiposPorFiltro={mostrarModalEquiposPorFiltro} setMostrarModalEquiposPorFiltro={setMostrarModalEquiposPorFiltro} setEquiposIniciales={setEquiposIniciales}/>
+                <ModalFilterEquipment mostrarModalEquiposPorFiltro={mostrarModalEquiposPorFiltro} setMostrarModalEquiposPorFiltro={setMostrarModalEquiposPorFiltro} setEquiposIniciales={setEquiposBiomedicos} />
             </ContainerEquipos>
         </MainContainer>
 

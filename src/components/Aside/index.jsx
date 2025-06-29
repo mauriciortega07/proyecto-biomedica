@@ -1,7 +1,7 @@
-import getEquiposBiomedicos from "../../data/getEquiposBiomedicos";
+//import getEquiposBiomedicos from "../../data/getEquiposBiomedicos1";
 import { AsideContainer, UnorderListContainer, EnlaceCategories } from "./styles";
 
-const AsideCategories = ({ listaEquipos, onCategoriaSeleccionada, categoriaSeleccionada }) => {
+const AsideCategories = ({ listaEquipos = [], onCategoriaSeleccionada, categoriaSeleccionada }) => {
     //SE OBTIENE LA LISTA DE EQUIPOS BIOMEDICOS ORIGINA Y SE REGRESA SOLO LA CATEGORIA DE RIESGO DE CADA UNO
     const categories = listaEquipos.map(equipo => equipo.nivelRiesgo);
     

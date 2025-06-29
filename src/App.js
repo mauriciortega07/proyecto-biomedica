@@ -5,23 +5,27 @@ import LogoEmpresa from "./utilities/logos/Ibiomedico.png";
 import { ThemeProvider } from "styled-components";
 import Theme from "./theme"
 import GlobalStyles from "./theme/GlobalStyles";
-import {getEquiposData} from "./data/getEquiposData";
+import { useEffect, useState } from "react";
+import useEquiposBiomedicos from "./data/useEquiposBiomedicos";
+//import getEquiposData from "./data/getEquiposData"
+//import {getEquiposData} from "./data/getEquiposData";
 function App() {
-  const equiposBiomedicos = getEquiposData();
-  //console.log(equiposBiomedicos);
+  //const [equiposBiomedicos, setEquiposBiomedicos] = useState([]);
+  const { equiposBiomedicos, setEquiposBiomedicos, cargando, error } = useEquiposBiomedicos();
+
   return (
-    <ThemeProvider theme={Theme}>
-      <GlobalStyles />      
-      <div className="App" style={{display: "grid", minHeight: "100dvh", gridTemplateRows: "auto 1fr auto"}}>
-        <Routes>
-          <Route path="/" element={<UserAcces logoImg={LogoEmpresa} />} />
-          <Route path="/Inicio" element={<TodosEquipos equiposBiomedicos={equiposBiomedicos}/>} />
-          
-          
-        </Routes>
-      </div>
-    </ThemeProvider>
-  );
+      <ThemeProvider theme={Theme}>
+        <GlobalStyles />
+        <div className="App" style={{ display: "grid", minHeight: "100dvh", gridTemplateRows: "auto 1fr auto" }}>
+          <Routes>
+            <Route path="/" element={<UserAcces logoImg={LogoEmpresa} />} />
+            <Route path="/Inicio" element={<TodosEquipos equiposBiomedicos={equiposBiomedicos} setEquiposBiomedicos={setEquiposBiomedicos} cargando ={cargando} error={error}/>} />
+
+
+          </Routes>
+        </div>
+      </ThemeProvider>
+    );
 }
 
 export default App;

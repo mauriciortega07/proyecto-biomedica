@@ -23,76 +23,68 @@ const useHandleInputChangeAndSubmit = () => {
         });
     }
 
-    const handleSubmitSigning = (e) => {
+    const handleSubmitSigning = async (e) => {
         e.preventDefault();
 
-        const { name, idempleado, rolempleado, /*email ,*/ password } = form;
-        const Users = JSON.parse(localStorage.getItem("users") || "[]");
-        const isUserRegistered = Users.find((user) => user.idempleado === idempleado);
-
-        if (isUserRegistered) {
-            alert("El usuario ya existe, por favor inicia sesion");
-            setForm({
-                name: "",
-                idempleado: "",
-                rolempleado: "",
-                //email: "",
-                password: "",  
-            })
-            navigate("/");
-        } else {
-            Users.push({
-                name: name,
-                idempleado: idempleado,
-                rolempleado: rolempleado,
-                //email: email,
-                password: password
+        try {
+            const response = await fetch("http://localhost:4000/register", {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                credentials: "include",
+                body: JSON.stringify(form),
             });
 
+            const data = await response.json();
 
-            localStorage.setItem("users", JSON.stringify(Users));
-            localStorage.setItem("user_session", JSON.stringify({
-                name: name,
-                idempleado: idempleado,
-                rolempleado: rolempleado,
-                //email: email,
-                password: password
-            }));
-            setUserName(name);
+            if (!response.ok) {
+                alert(data.message || "Error al registrarse");
+                return;
+            }
+
+            localStorage.setItem("user_session", JSON.stringify(data.user));
+            setUserName(data.user.name);
             setShowModal(true);
             setTimeout(() => navigate("/Inicio"), 3000);
-
+        } catch (error) {
+            console.error("Error al registrarse", error);
+            alert("Error en el registro");
         }
-    }
+    };
 
-    const handleSubmitLogin = (e) => {
+
+    const handleSubmitLogin = async (e) => {
         e.preventDefault();
 
-        const { idempleado, password } = form;
-        const Users = JSON.parse(localStorage.getItem("users") || "[]")
+        try {
+            const response = await fetch("http://localhost:4000/login", {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                credentials: "include",
+                body: JSON.stringify({
+                    idempleado: form.idempleado,
+                    password: form.password
+                }),
+            });
 
-        const validUsers = Users.find((user) => user.idempleado === idempleado && user.password === password)
+            const data = await response.json();
 
-        if (!validUsers) {
-            alert("Usuario y/o contraseña incorrectaos. Ingresa nuevamente");
-            setForm({
-                idempleado: "",
-                password: "",  
-            })  
-        } else {
-            //alert("Bienvenido " + validUsers.name); 
-            //const modal = (<WelcomeModal />);
-            localStorage.setItem("user_session", JSON.stringify(validUsers));
-            setUserName(validUsers.name);
+            if (!response.ok) {
+                alert(data.message || "Usuario o contraseña incorrectos");
+                return;
+            }
+
+            localStorage.setItem("user_session", JSON.stringify(data.user));
+            setUserName(data.user.name);
             setShowModal(true);
             setTimeout(() => navigate("/Inicio"), 3000);
-
-
-
+        } catch (error) {
+            console.error("Error al iniciar sesión", error);
+            alert("Error en el inicio de sesión");
         }
-    }
+    };
 
-    return { form, handleInputChange, handleSubmitSigning, handleSubmitLogin,showModal,setShowModal ,userName}
+
+    return { form, handleInputChange, handleSubmitSigning, handleSubmitLogin, showModal, setShowModal, userName }
 
 }
 

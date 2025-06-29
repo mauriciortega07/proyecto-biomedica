@@ -21,7 +21,7 @@ const IconColor = {
 
 
 
-const RenderAllEquipment = ({ busqueda, equiposAMostrar, equiposIniciales, setEquiposIniciales }) => {
+const RenderAllEquipment = ({ busqueda, equiposAMostrar = [], equiposIniciales, setEquiposIniciales, cargando, error }) => {
     console.log(equiposIniciales)
     //ESTADOS DEL MODAL EDITAR EQUIPO
     const [modalEditEquipment, setModalEditEquipment] = useState(false);
@@ -50,10 +50,29 @@ const RenderAllEquipment = ({ busqueda, equiposAMostrar, equiposIniciales, setEq
             </ContainerMsgNotFound>
         );
     }*/
-    if (equiposAMostrar.length === 0) {
+    /*if (equiposAMostrar.length === 0) {
         return (
             <ContainerMsgNotFound>
                 <label>No se encontraron resultados</label>
+            </ContainerMsgNotFound>
+        );
+    }*/
+
+    if (cargando) return <p>Cargando Equipos...</p>
+    if (error) {
+        return (
+            <p style={{ color: 'red' }}>Error al cargar los equipos...{error}</p>
+        );
+    }
+
+    if (equiposAMostrar.length === 0) {
+        const mensaje = busqueda === "" ? "No hay equipos registrados." : "No se encontraron resultados para la busqueda.";
+
+
+
+        return (
+            <ContainerMsgNotFound>
+                <label>{mensaje}</label>
             </ContainerMsgNotFound>
         );
     }
@@ -84,10 +103,11 @@ const RenderAllEquipment = ({ busqueda, equiposAMostrar, equiposIniciales, setEq
                                         <dt><FileText size={18} color={IconColor.text} />Descripcion:</dt>
                                         <dd>{equipo.descripcion}</dd>
 
+                                        <dt><FileText size={18} color={IconColor.text} />Tipo de Dispositivo: :</dt>
+                                        <dd>{equipo.tipoDispositivo}</dd>
+
                                         <dt><AlertCircle size={18} color={IconColor.risk} />Nivel de Riesgo:</dt>
                                         <dd>{equipo.nivelRiesgo}</dd>
-
-
 
                                         <dt><ClipboardList size={18} color={IconColor.checklist} />NOM Aplicada:</dt>
                                         <dd>{equipo.nomAplicada}</dd>
@@ -95,10 +115,11 @@ const RenderAllEquipment = ({ busqueda, equiposAMostrar, equiposIniciales, setEq
 
                                         <dt><Wrench size={18} color={IconColor.wrench} />Caracteristicas: </dt>
                                         <dd>
-
-
                                             <ul>
-                                                {equipo.caracteristicas.map((caracteristica, i) => <li key={i}>{caracteristica}</li>)}
+                                                {/*equipo.caracteristicas.map((caracteristica, i) => <li key={i}>{caracteristica}</li>)*/}
+                                                {(Array.isArray(equipo.caracteristicas) ? equipo.caracteristicas : []).map((caracteristica, i) => (
+                                                    <li key={i}>{caracteristica}</li>
+                                                ))}
                                             </ul>
 
                                         </dd>
@@ -106,7 +127,10 @@ const RenderAllEquipment = ({ busqueda, equiposAMostrar, equiposIniciales, setEq
                                         <dt><HardHat size={18} color={IconColor.tool} />Mantenimiento Preventivo: </dt>
                                         <dd>
                                             <ul>
-                                                {equipo.mantPreventivo.map((mantenimiento, i) => <li key={i}>{mantenimiento}</li>)}
+                                                {/*equipo.mantPreventivo.map((mantenimiento, i) => <li key={i}>{mantenimiento}</li>)*/}
+                                                {(Array.isArray(equipo.mantPreventivo) ? equipo.mantPreventivo : []).map((mantenimiento, i) => (
+                                                    <li key={i}>{mantenimiento}</li>
+                                                ))}
                                             </ul>
                                         </dd>
 
@@ -114,7 +138,10 @@ const RenderAllEquipment = ({ busqueda, equiposAMostrar, equiposIniciales, setEq
                                         <dt><Drill size={18} color={IconColor.drill} />Mantenimiento Correctivo: </dt>
                                         <dd>
                                             <ul>
-                                                {equipo.mantCorrectivo.map((mantenimiento, i) => <li key={i}>{mantenimiento}</li>)}
+                                                {/*equipo.mantCorrectivo.map((mantenimiento, i) => <li key={i}>{mantenimiento}</li>)*/}
+                                                {(Array.isArray(equipo.mantCorrectivo) ? equipo.mantCorrectivo : []).map((mantenimiento, i) => (
+                                                    <li key={i}>{mantenimiento}</li>
+                                                ))}
                                             </ul>
                                         </dd>
 
@@ -131,13 +158,13 @@ const RenderAllEquipment = ({ busqueda, equiposAMostrar, equiposIniciales, setEq
                                         )}
 
                                         {equipo.agregadoPor && (
-                                            <p style={{fontStyle: "italic", fontSize: "0.9rem"}}>
+                                            <p style={{ fontStyle: "italic", fontSize: "0.9rem" }}>
                                                 Agregado por: {equipo.agregadoPor}
                                             </p>
                                         )}
 
                                         {equipo.fechaAgregado && (
-                                            <p style={{fontStyle: "italic", fontSize: "0.8rem", color: "#666" }}>
+                                            <p style={{ fontStyle: "italic", fontSize: "0.8rem", color: "#666" }}>
                                                 Agregado el: {equipo.fechaAgregado}
                                             </p>
                                         )}

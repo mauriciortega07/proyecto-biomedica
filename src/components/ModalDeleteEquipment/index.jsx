@@ -1,18 +1,42 @@
 import { useEffect, useState } from "react";
-import {ModalBackground,
+import {
+    ModalBackground,
     ModalContent,
     TitleModal,
     ButtonSaveEquipment,
     ButtonCancelled,
-    ButtonsContainer} from './styles'
+    ButtonsContainer
+} from './styles'
 
 const ModalDeleteEquipment = ({ equipoAEliminar, setModalDeleteEquipment, equiposIniciales, setEquiposIniciales }) => {
     const [confirmar, setConfirmar] = useState(false);
+    const [error, setError] = useState(null);
 
-    const handleDeleteEquipment = () => {
+    /*const handleDeleteEquipment = () => {
         const nuevaLista = equiposIniciales.filter(equipo => equipo.id !== equipoAEliminar.id);
         setEquiposIniciales(nuevaLista);
         setConfirmar(true);
+    };*/
+
+    const handleDeleteEquipment = async () => {
+        try {
+            const response = await fetch(`http://localhost:4000/equipos_biomedicos/${equipoAEliminar.id}`, {
+                method: 'DELETE',
+                credentials: 'include'
+            });
+
+            if (!response.ok) {
+                throw new Error("Error al eliminar el equipo de la base de datos");
+            }
+
+            //eliminar del estado local si la respuesta fue exitosa
+            const nuevaLista = equiposIniciales.filter(equipo => equipo.id !== equipoAEliminar.id);
+            setEquiposIniciales(nuevaLista);
+            setConfirmar(true);
+
+        } catch (error) {
+            console.error("Error al eliminar el equipo de la base de datos: ", error);
+        }
     };
 
     useEffect(() => {
@@ -29,7 +53,7 @@ const ModalDeleteEquipment = ({ equipoAEliminar, setModalDeleteEquipment, equipo
         <ModalBackground>
             <ModalContent>
                 <TitleModal>Eliminar Equipo</TitleModal>
-                {!confirmar ? (
+                {/*{!confirmar ? (
                     <>
                         <p>¿Estás seguro que deseas eliminar: <strong>{equipoAEliminar.nombre}</strong>?</p>
                         <ButtonsContainer>
@@ -38,7 +62,24 @@ const ModalDeleteEquipment = ({ equipoAEliminar, setModalDeleteEquipment, equipo
                         </ButtonsContainer>
                     </>
                 ) : (
-                    <p>✅ Equipo eliminado correctamente</p>
+                    <p>Equipo eliminado correctamente</p>
+                )} */}
+
+                {error && <p>{error}</p>}
+
+                {!confirmar && !error ? (
+                    <>
+                        <p>¿Estás seguro que deseas eliminar: <strong>{equipoAEliminar.nombre}</strong>?</p>
+                        <ButtonsContainer>
+                            <ButtonCancelled onClick={() => setModalDeleteEquipment(false)}>Cancelar</ButtonCancelled>
+                            <ButtonSaveEquipment onClick={handleDeleteEquipment}>Eliminar</ButtonSaveEquipment>
+                        </ButtonsContainer>
+                    </>
+
+                ) : null}
+
+                {confirmar && !error && (
+                    <p>Equipo eliminado correctamente</p>
                 )}
             </ModalContent>
         </ModalBackground >

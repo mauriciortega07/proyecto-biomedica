@@ -1,4 +1,4 @@
-import getEquiposBiomedicos from "./getEquiposBiomedicos";
+/*import getEquiposBiomedicos from "./getEquiposBiomedicos";
 
 function asignarIds(equipos) {
   return equipos.map((equipo, idx) => ({
@@ -30,4 +30,4 @@ export function getEquiposData() {
     localStorage.setItem("equiposBiomedicos", JSON.stringify(equiposIniciales));
     return equiposIniciales;
   }
-};
+};*/

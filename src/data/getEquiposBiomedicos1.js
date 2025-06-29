@@ -1,5 +1,5 @@
 
-const getEquiposBiomedicos = () => {
+/*const getEquiposBiomedicos = () => {
   
     const equiposBiomedicos = [
     {nombre: "Ventilador de Traslado Neonatal", 
@@ -118,4 +118,4 @@ const getEquiposBiomedicos = () => {
 
 }
 
-export default getEquiposBiomedicos;
+export default getEquiposBiomedicos;*/
