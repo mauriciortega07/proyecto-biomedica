@@ -95,7 +95,7 @@ const ModalNewEquipment = ({ equiposIniciales, setEquiposIniciales, mostrarModal
         }
 
         try {
-            const response = await fetch("http://localhost:4000/equipos_biomedicos", {
+            const response = await fetch("https://backend-proyecto-biomedica-production.up.railway.app/equipos_biomedicos", {
                 method: 'POST',
                 headers: {
                     'Content-type': 'application/json'

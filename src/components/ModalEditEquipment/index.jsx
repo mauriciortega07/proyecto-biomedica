@@ -111,7 +111,7 @@ const ModalEditEquipment = ({ equipoAEditar, modalEditEquipment, setModalEditEqu
 
         try {
             // Petición PUT al backend para actualizar el equipo en la base de datos
-            const response = await fetch(`http://localhost:4000/equipos_biomedicos/${equipoAEditar.id}`, {
+            const response = await fetch(`https://backend-proyecto-biomedica-production.up.railway.app/equipos_biomedicos/${equipoAEditar.id}`, {
                 method: 'PUT',
                 headers: {
                     'Content-Type': 'application/json',
