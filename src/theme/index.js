@@ -1,7 +1,8 @@
 const Theme = {
     color: {
         headerColor: '#def8ff',
-        mainColor: '#ffecf6'
+        mainColor: '#b7b4b6'
+        //'#ffecf6'
     },
     fonts: {
         base: "Raleway,Poppins, monseratt, sans-serif"
