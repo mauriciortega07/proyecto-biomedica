@@ -27,7 +27,7 @@ const useEquiposBiomedicos= () => {
     useEffect(() => {
       const fetchEquipos = async () => {
         try {
-          const response = await fetch("http://localhost:4000/equipos_biomedicos");
+          const response = await fetch("https://backend-proyecto-biomedica-production.up.railway.app/equipos_biomedicos");
           
           if(!response.ok) throw new Error("Error al obtener los datos de los equipos registrados");
           
