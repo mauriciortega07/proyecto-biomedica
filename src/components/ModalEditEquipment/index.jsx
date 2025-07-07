@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { FileText, AlertCircle, ClipboardList, Wrench, HardHat, Drill, Cable, ImagePlus } from 'lucide-react';
-import { ModalBackground, ModalContent, FormField, TextArea, TitleModal, ButtonSaveEquipment, ButtonCancelled, ButtonsContainer } from "./styles";
+import { ModalBackground, ModalContent, FormField, TextArea, TitleModal, ButtonSaveEquipment, ButtonCancelled, ButtonsContainer, TagsContainer } from "./styles";
 
 const IconColor = {
     user: '#007BFF',       // azul
@@ -20,6 +20,8 @@ const ModalEditEquipment = ({ equipoAEditar, modalEditEquipment, setModalEditEqu
         nombre: "",
         descripcion: "",
         tipoDispositivo: "",
+        activoEnInventario: "",
+        ubicacion: "Sin Ubicación En El Inventario",
         nivelRiesgo: "",
         nomAplicada: "",
         caracteristicas: [],
@@ -61,36 +63,6 @@ const ModalEditEquipment = ({ equipoAEditar, modalEditEquipment, setModalEditEqu
         setEquipoEditado(prev => ({ ...prev, [name]: value }));
 
     };
-
-
-    /*const handleSave = () => {
-        setMensajeConfirmacion("Equipo Editado con Exito");
-        
-        const userSession = JSON.parse(localStorage.getItem("user_session"));
-        const nombreUsuarioEnSesion = userSession?.name || "Anonimo";
-        
-        const updateEquipo =  {
-                ...equipoEditado,
-                caracteristicas: equipoEditado.caracteristicas.split('\n').filter(Boolean),
-                mantPreventivo: equipoEditado.mantPreventivo.split('\n').filter(Boolean),
-                mantCorrectivo: equipoEditado.mantCorrectivo.split('\n').filter(Boolean),
-                editadoPor: nombreUsuarioEnSesion,
-                fechaModificacion: new Date().toLocaleString()
-        };
-
-
-        setEquiposIniciales(
-            prevEquipos => prevEquipos.map(equipo => 
-                equipo.id == equipoAEditar.id ? updateEquipo : equipo
-            )
-        
-        );
-
-        setTimeout(() => {
-            setModalEditEquipment(false);
-            setMensajeConfirmacion("");
-        }, 3000)
-    };*/
 
     //FUNCION ASINCRONA PARA GUARDAR LOS CAMBIOS EN LA BD
     const handleSave = async () => {
@@ -157,7 +129,7 @@ const ModalEditEquipment = ({ equipoAEditar, modalEditEquipment, setModalEditEqu
             <ModalContent>
                 <TitleModal>Equipo a Editar</TitleModal>
 
-                <dt><Cable size={20} color={IconColor.cable} style={{ margin: "0px 10px" }} />Nombre del equipo</dt>
+                <TagsContainer><Cable size={20} color={IconColor.cable} style={{ margin: "0px 10px" }} />Nombre del equipo</TagsContainer>
                 <FormField
                     name="nombre"
                     placeholder="Nombre del equipo"
@@ -165,7 +137,7 @@ const ModalEditEquipment = ({ equipoAEditar, modalEditEquipment, setModalEditEqu
                     onChange={handleInputChange}
                 />
 
-                <dt><FileText size={20} color={IconColor.text} style={{ margin: "0px 10px" }} />Descripcion:</dt>
+                <TagsContainer><FileText size={20} color={IconColor.text} style={{ margin: "0px 10px" }} />Descripcion:</TagsContainer>
                 <TextArea
                     name="descripcion"
                     placeholder="Descripcion del equipo"
@@ -173,7 +145,42 @@ const ModalEditEquipment = ({ equipoAEditar, modalEditEquipment, setModalEditEqu
                     onChange={handleInputChange}
                 />
 
-                <dt><FileText size={20} color={IconColor.text} style={{ margin: "0px 10px" }} />Tipo de Dispositivo:</dt>
+                <TagsContainer><FileText size={20} color={IconColor.text} style={{ margin: "0px 10px" }} />¿Esta activo en el inventario?:</TagsContainer>
+                <div size={20} color={IconColor.text} style={{ margin: "20px 10px" }} >
+                    <label size={20} color={IconColor.text}>
+                        <input
+                            type='radio'
+                            name="activoEnInventario"
+                            value='si'
+                            checked={equipoEditado.activoEnInventario === 'si'}
+                            onChange={handleInputChange}
+                            required
+                        />
+                        Si
+                    </label>
+                    <label size={20} color={IconColor.text}>
+                        <input
+                            type='radio'
+                            name="activoEnInventario"
+                            value='no'
+                            checked={equipoEditado.activoEnInventario === 'no'}
+                            onChange={handleInputChange}
+                            required
+                        />
+                        No
+                    </label>
+                </div>
+
+                <TagsContainer><FileText size={20} color={IconColor.text} style={{ margin: "0px 10px" }} />Ubicacion: </TagsContainer>
+                <FormField
+                    name="ubicacion"
+                    placeholder="define su ubicacion"
+                    value={equipoEditado.ubicacion}
+                    onChange={handleInputChange}
+                    required
+                />
+
+                <TagsContainer><FileText size={20} color={IconColor.text} style={{ margin: "0px 10px" }} />Tipo de Dispositivo:</TagsContainer>
                 <TextArea
                     name="tipoDispositivo"
                     placeholder="Tipo de Dispositivo"
@@ -181,7 +188,7 @@ const ModalEditEquipment = ({ equipoAEditar, modalEditEquipment, setModalEditEqu
                     onChange={handleInputChange}
                 />
 
-                <dt><AlertCircle size={20} color={IconColor.risk} style={{ margin: "0px 10px" }} />Nivel de Riesgo:</dt>
+                <TagsContainer><AlertCircle size={20} color={IconColor.risk} style={{ margin: "0px 10px" }} />Nivel de Riesgo:</TagsContainer>
                 <FormField
                     name="nivelRiesgo"
                     placeholder="Nivel de riesgo"
@@ -189,7 +196,7 @@ const ModalEditEquipment = ({ equipoAEditar, modalEditEquipment, setModalEditEqu
                     onChange={handleInputChange}
                 />
 
-                <dt><ClipboardList size={20} color={IconColor.checklist} style={{ margin: "0px 10px" }} />NOM Aplicada:</dt>
+                <TagsContainer><ClipboardList size={20} color={IconColor.checklist} style={{ margin: "0px 10px" }} />NOM Aplicada:</TagsContainer>
                 <FormField
                     name="nomAplicada"
                     placeholder="Norma de Mantenmiento aplicada"
@@ -197,7 +204,7 @@ const ModalEditEquipment = ({ equipoAEditar, modalEditEquipment, setModalEditEqu
                     onChange={handleInputChange}
                 />
 
-                <dt><Wrench size={20} color={IconColor.wrench} style={{ margin: "0px 10px" }} />Caracteristicas: (Una por linea)</dt>
+                <TagsContainer><Wrench size={20} color={IconColor.wrench} style={{ margin: "0px 10px" }} />Caracteristicas: (Una por linea)</TagsContainer>
                 <TextArea
                     name="caracteristicas"
                     placeholder="Caracteristicas (una por linea)"
@@ -205,7 +212,7 @@ const ModalEditEquipment = ({ equipoAEditar, modalEditEquipment, setModalEditEqu
                     onChange={handleInputChange}
                 />
 
-                <dt><HardHat size={20} color={IconColor.tool} style={{ margin: "0px 10px" }} />Mantenimiento Preventivo: (Una Accion por linea)</dt>
+                <TagsContainer><HardHat size={20} color={IconColor.tool} style={{ margin: "0px 10px" }} />Mantenimiento Preventivo: (Una Accion por linea)</TagsContainer>
                 <TextArea
                     name="mantPreventivo"
                     value={equipoEditado.mantPreventivo}
@@ -213,7 +220,7 @@ const ModalEditEquipment = ({ equipoAEditar, modalEditEquipment, setModalEditEqu
                     onChange={handleInputChange}
                 />
 
-                <dt><Drill size={20} color={IconColor.drill} style={{ margin: "0px 10px" }} />Mantenimiento Correctivo: (Una Accion por linea)</dt>
+                <TagsContainer><Drill size={20} color={IconColor.drill} style={{ margin: "0px 10px" }} />Mantenimiento Correctivo: (Una Accion por linea)</TagsContainer>
                 <TextArea
                     name="mantCorrectivo"
                     placeholder="Ingresa el Mantenimineto Corectivo (una por linea)"
@@ -221,7 +228,7 @@ const ModalEditEquipment = ({ equipoAEditar, modalEditEquipment, setModalEditEqu
                     onChange={handleInputChange}
                 />
 
-                <dt><ImagePlus size={20} color={IconColor.imagePlus} style={{ margin: "0px 10px" }} />Imagen del Equipo: </dt>
+                <TagsContainer><ImagePlus size={20} color={IconColor.imagePlus} style={{ margin: "0px 10px" }} />Imagen del Equipo: </TagsContainer>
                 <FormField
                     name="img"
                     placeholder="link de la imagen del dispositivo"

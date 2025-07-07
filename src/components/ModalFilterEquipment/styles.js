@@ -153,6 +153,13 @@ const ButtonRestart = styled.button`
 
 `
 
+
+const TagsContainer = styled.dt`
+    display: flex;
+    align-items: anchor-center;
+    margin: 10px 0px;
+`
+
 export {
     ModalBackground,
     ModalContent,
@@ -162,6 +169,7 @@ export {
     ButtonStartEquipment,
     ButtonYes,
     ButtonOther,
-    ButtonRestart
+    ButtonRestart,
+    TagsContainer
 
 }

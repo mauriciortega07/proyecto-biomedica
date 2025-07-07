@@ -1,4 +1,4 @@
-import { FileText, AlertCircle, ClipboardList, Wrench, HardHat, Drill, Cable, ImagePlus } from 'lucide-react';
+import { FileText, AlertCircle, ClipboardList, Wrench, HardHat, Drill, Cable, ImagePlus, CloudUploadIcon, MapPinned } from 'lucide-react';
 import {
     ModalBackground, ModalContent,
     FormField,
@@ -7,9 +7,10 @@ import {
     ButtonStartEquipment,
     ButtonYes,
     ButtonRestart,
-    ButtonOther
+    ButtonOther,
+    TagsContainer
 } from "./styles";
-import { useState, useEffect, lazy } from "react";
+import { useState, useEffect, lazy, use } from "react";
 const IconColor = {
     user: '#007BFF',       // azul
     text: '#6C757D',       // gris
@@ -19,7 +20,10 @@ const IconColor = {
     wrench: '#FFC107', //gris
     drill: '#ca7f05', //sal
     cable: '#DC3545',//rojo
-    imagePlus: '#EA40D0'
+    imagePlus: '#EA40D0',
+    cloudUploadIcon: '#EA40D0',
+    mapPinned: '#17A2B8'
+
 }
 
 function normalizarEquipo(equipoModal) {
@@ -29,6 +33,8 @@ function normalizarEquipo(equipoModal) {
         img: equipoModal.img || equipoModal.imagen || 'https://via.placeholder.com/350',
         descripcion: equipoModal.descripcion || '',
         tipoDispositivo: equipoModal.tipoDispositivo || 'No definido',
+        activoEnInventario: equipoModal.activoEnInventario,
+        ubicacion: equipoModal.ubicacion || 'sin ubicacion en el inventaro',
         nivelRiesgo: equipoModal.nivelRiesgo || 'No definido',
         nomAplicada: equipoModal.nomAplicada || '',
         caracteristicas: equipoModal.caracteristicas || (equipoModal.respuestasSi?.length > 0 ? equipoModal.respuestasSi?.map(r => `${r.caracteristica} → Si`) : ['Sin características definidas']),
@@ -51,11 +57,15 @@ const ModalFilterEquipment = ({ mostrarModalEquiposPorFiltro, setMostrarModalEqu
     const [imagenUrl, setImagenUrl] = useState('');
     const [respuestasSi, setRespuestasSi] = useState([]);
     const [descripcion, setDescripcion] = useState('');
+    const [activoEnInventario, setActivoEnInventario] = useState('');
+    const [ubicacion, setUbicacion] = useState('');
     const [tipoDispositivo, setTipoDispositivo] = useState('');
     const [nomAplicada, setNomAplicada] = useState('');
     const [mantPreventivo, setMantPreventivo] = useState('');
     const [mantCorrectivo, setMantCorrectivo] = useState('');
     const [mensajeConfirmacion, setMensajeConfirmacion] = useState("");
+
+    const parseList = (texto) => texto.split("\n").map((item) => item.trim()).filter(Boolean);
 
     const arbolNoInvasivo = {
         question: "¿El dispositivo esta destinado a la conduccion o almacenamiento para perfusion,administarcion o introduccion en el cuerpo?",
@@ -729,6 +739,8 @@ const ModalFilterEquipment = ({ mostrarModalEquiposPorFiltro, setMostrarModalEqu
                 nombre: equipo,
                 descripcion: descripcion || 'No especificada',
                 tipoDispositivo,
+                activoEnInventario: activoEnInventario,
+                ubicacion: ubicacion || 'sin ubicacion en el inventario',
                 imagen: imagenUrl,
                 respuestasSi: [...respuestasSi, {
                     caracteristica: hiloActual.question,
@@ -736,8 +748,9 @@ const ModalFilterEquipment = ({ mostrarModalEquiposPorFiltro, setMostrarModalEqu
                 }].filter(r => r.respuesta === "Si"),
                 nivelRiesgo: option.result,
                 nomAplicada: nomAplicada || 'No especificada',
-                mantPreventivo: mantPreventivo ? mantPreventivo.split(',').map(p => p.trim()) : ['Sin mantenimiento preventivo definido'],
-                mantCorrectivo: mantCorrectivo ? mantCorrectivo.split(',').map(c => c.trim()) : ['Sin mantenimiento correctivo definido'],
+                
+                mantPreventivo: mantPreventivo ? mantPreventivo.split('\n').map(p => p.trim()) : ['Sin mantenimiento preventivo definido'],
+                mantCorrectivo: mantCorrectivo ? mantCorrectivo.split('\n').map(c => c.trim()) : ['Sin mantenimiento correctivo definido'],
                 agregadoPor: nombreUsuarioEnSesion,
                 fechaAgregado: fechaActual,
                 usuario_id
@@ -769,6 +782,8 @@ const ModalFilterEquipment = ({ mostrarModalEquiposPorFiltro, setMostrarModalEqu
         setHiloActual(null);
         setHistorial([]);
         setResultado(null);
+        setActivoEnInventario('');
+        setUbicacion('');
         setImagenUrl('');
         setRespuestasSi([]);
         setDescripcion('');
@@ -787,8 +802,23 @@ const ModalFilterEquipment = ({ mostrarModalEquiposPorFiltro, setMostrarModalEqu
         }
     }, [mostrarModalEquiposPorFiltro]);
 
+    const renderUbication = () => {
+        if (activoEnInventario === 'si') {
+            return (
+                <>
+                    <TagsContainer><MapPinned size={20} color={IconColor.text} style={{ margin: "10px 0px" }} />Ubicacion: </TagsContainer>
+                    <FormField
+                        name="ubicacion"
+                        placeholder="define su ubicacion"
+                        value={ubicacion}
+                        onChange={(e) => setUbicacion(e.target.value)}
+                        required
+                    />
+                </>
+            )
+        }
 
-
+    }
 
     if (!mostrarModalEquiposPorFiltro) return null;
 
@@ -798,7 +828,7 @@ const ModalFilterEquipment = ({ mostrarModalEquiposPorFiltro, setMostrarModalEqu
                 {!equipoIngresado ? (
                     <>
                         <TitleModal>Nuevo Equipo Mediante Toma de Decisiones</TitleModal>
-                        <dt><Cable size={20} color={IconColor.cable} style={{ margin: "0px 10px" }} />Nombre del equipo</dt>
+                        <TagsContainer><Cable size={20} color={IconColor.cable} style={{ margin: "0px 10px" }} />Nombre del equipo</TagsContainer>
                         <FormField
                             type="text"
                             value={equipo}
@@ -806,9 +836,7 @@ const ModalFilterEquipment = ({ mostrarModalEquiposPorFiltro, setMostrarModalEqu
                             placeholder="nombre del equipo"
                         />
 
-
-
-                        <dt><ClipboardList size={20} color={IconColor.checklist} style={{ margin: "0px 10px" }} />Tipo de Dispositivo:</dt>
+                        <TagsContainer><ClipboardList size={20} color={IconColor.checklist} style={{ margin: "0px 10px" }} />Tipo de Dispositivo:</TagsContainer>
                         <select
                             style={{ width: "100%", padding: "8px", borderRadius: "5px", marginBottom: "1rem" }}
                             value={tipoDispositivo}
@@ -824,14 +852,42 @@ const ModalFilterEquipment = ({ mostrarModalEquiposPorFiltro, setMostrarModalEqu
                             <option value="reglas especiales">Reglas especiales</option>
                         </select>
 
-                        <dt><FileText size={20} color={IconColor.text} style={{ margin: "0px 10px" }} />Descripcion:</dt>
+                        <TagsContainer><CloudUploadIcon size={20} color={IconColor.text} style={{ margin: "0px 10px" }} />¿Esta activo en el inventario?:</TagsContainer>
+                        <div size={20} color={IconColor.text} style={{ margin: "20px 10px" }}>
+                            <label size={20} color={IconColor.text}>
+                                <input
+                                    type='radio'
+                                    name="activoEnInventario"
+                                    value='si'
+                                    checked={activoEnInventario === 'si'}
+                                    onChange={(e) => setActivoEnInventario(e.target.value)}
+                                    required
+                                />
+                                Si
+                            </label>
+                            <label size={20} color={IconColor.text}>
+                                <input
+                                    type='radio'
+                                    name="activoEnInventario"
+                                    value='no'
+                                    checked={activoEnInventario === 'no'}
+                                    onChange={(e) => setActivoEnInventario(e.target.value)}
+                                    required
+                                />
+                                No
+                            </label>
+
+                            {renderUbication()}
+                        </div>
+
+                        <TagsContainer><FileText size={20} color={IconColor.text} style={{ margin: "0px 10px" }} />Descripcion:</TagsContainer>
                         <TextArea
                             value={descripcion}
                             onChange={(e) => setDescripcion(e.target.value)}
                             placeholder="Ejemplo: Equipo portátil diseñado para ventilación neonatal..."
                         />
 
-                        <dt><ClipboardList size={20} color={IconColor.checklist} style={{ margin: "0px 10px" }} />NOM Aplicada:</dt>
+                        <TagsContainer><ClipboardList size={20} color={IconColor.checklist} style={{ margin: "0px 10px" }} />NOM Aplicada:</TagsContainer>
                         <FormField
                             value={nomAplicada}
                             onChange={(e) => setNomAplicada(e.target.value)}
@@ -839,21 +895,21 @@ const ModalFilterEquipment = ({ mostrarModalEquiposPorFiltro, setMostrarModalEqu
                         />
 
 
-                        <dt><HardHat size={20} color={IconColor.tool} style={{ margin: "0px 10px" }} />Mantenimiento Preventivo (opcional): </dt>
+                        <TagsContainer><HardHat size={20} color={IconColor.tool} style={{ margin: "0px 10px" }} />Mantenimiento Preventivo (opcional): </TagsContainer>
                         <TextArea
                             value={mantPreventivo}
                             onChange={(e) => setMantPreventivo(e.target.value)}
                             placeholder="Ejemplo: Limpieza, revisión visual de conexiones..."
                         />
 
-                        <dt><Drill size={20} color={IconColor.drill} style={{ margin: "0px 10px" }} />Mantenimiento Correctivo (opcional): </dt>
+                        <TagsContainer><Drill size={20} color={IconColor.drill} style={{ margin: "0px 10px" }} />Mantenimiento Correctivo (opcional): </TagsContainer>
                         <TextArea
                             value={mantCorrectivo}
                             onChange={(e) => setMantCorrectivo(e.target.value)}
                             placeholder="Ejemplo: Reemplazo de piezas dañadas, calibración..."
                         />
 
-                        <dt><ImagePlus size={20} color={IconColor.imagePlus} style={{ margin: "0px 10px" }} />Imagen del Equipo: </dt>
+                        <TagsContainer><ImagePlus size={20} color={IconColor.imagePlus} style={{ margin: "0px 10px" }} />Imagen del Equipo: </TagsContainer>
                         <FormField
                             type="text"
                             value={imagenUrl}

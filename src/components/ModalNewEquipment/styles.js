@@ -75,12 +75,20 @@ const ButtonSaveEquipment = styled.button`
 
 
 `
+
+const TagsContainer = styled.dt`
+    display: flex;
+    align-items: anchor-center;
+    margin: 10px 0px;
+`
+
 export {
     ModalBackground,
     ModalContent,
     FormField,
     TextArea,
     TitleModal,
-    ButtonSaveEquipment
+    ButtonSaveEquipment,
+    TagsContainer
     
 }

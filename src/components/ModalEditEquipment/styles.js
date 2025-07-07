@@ -103,14 +103,21 @@ const ButtonsContainer = styled.div`
     justify-content: space-around;
 `
 
+const TagsContainer = styled.dt`
+    display: flex;
+    align-items: anchor-center;
+    margin: 10px 0px;
+`
+
 export {
-    ModalBackground,
-    ModalContent,
-    FormField,
-    TextArea,
-    TitleModal,
-    ButtonSaveEquipment,
-    ButtonCancelled,
-    ButtonsContainer
+  ModalBackground,
+  ModalContent,
+  FormField,
+  TextArea,
+  TitleModal,
+  ButtonSaveEquipment,
+  ButtonCancelled,
+  ButtonsContainer,
+  TagsContainer
 
 }

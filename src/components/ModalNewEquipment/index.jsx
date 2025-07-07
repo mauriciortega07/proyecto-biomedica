@@ -1,6 +1,6 @@
-import { FileText, AlertCircle, ClipboardList, Wrench, HardHat, Drill, Cable, ImagePlus } from 'lucide-react';
+import { FileText, AlertCircle, ClipboardList, Wrench, HardHat, Drill, Cable, ImagePlus, CloudUploadIcon, MapPinned } from 'lucide-react';
 import { useState } from "react";
-import { ModalBackground, ModalContent, FormField, TextArea, TitleModal, ButtonSaveEquipment } from "./styles";
+import { ModalBackground, ModalContent, FormField, TextArea, TitleModal, ButtonSaveEquipment, TagsContainer } from "./styles";
 const IconColor = {
     user: '#007BFF',       // azul
     text: '#6C757D',       // gris
@@ -10,7 +10,9 @@ const IconColor = {
     wrench: '#FFC107', //gris
     drill: '#ca7f05', //sal
     cable: '#DC3545',//rojo
-    imagePlus: '#EA40D0'
+    imagePlus: '#EA40D0',
+    cloudUploadIcon: '#EA40D0',
+    mapPinned: '#17A2B8'
 }
 
 const ModalNewEquipment = ({ equiposIniciales, setEquiposIniciales, mostrarModal, setMostrarModal }) => {
@@ -19,6 +21,8 @@ const ModalNewEquipment = ({ equiposIniciales, setEquiposIniciales, mostrarModal
         nombre: "",
         descripcion: "",
         tipoDispositivo: "",
+        activoEnInventario: "",
+        ubicacion: "",
         nivelRiesgo: "",
         nomAplicada: "",
         caracteristicas: [],
@@ -36,45 +40,6 @@ const ModalNewEquipment = ({ equiposIniciales, setEquiposIniciales, mostrarModal
         setNuevoEquipo({ ...nuevoEquipo, [name]: value })
     }
 
-
-    /* const agregarEquipo = (e) => {
-         e.preventDefault();
- 
-         const userSession = JSON.parse(localStorage.getItem("user_session"));
-         //const nombreUsuarioEnSesion = userSession?.name || "Anonimo";
-         const user_id = userSession?.id;
- 
-         const nuevo = {
-             ...nuevoEquipo,
-             id: `${nuevoEquipo.nombre}-${nuevoEquipo.nivelRiesgo}-${Date.now()}`,
-             caracteristicas: parseList(nuevoEquipo.caracteristicas),
-             mantPreventivo: parseList(nuevoEquipo.mantPreventivo),
-             mantCorrectivo: parseList(nuevoEquipo.mantCorrectivo),
-             //agregadoPor: nombreUsuarioEnSesion,
-             fechaAgregado: new Date().toLocaleString()
-         };
- 
-         setEquiposIniciales(prev => [...prev, nuevo]);
-         setMensajeConfirmacion("Equipo Agregado con Exito");
- 
-         setNuevoEquipo({
-             nombre: "",
-             descripcion: "",
-             nivelRiesgo: "",
-             nomAplicada: "",
-             caracteristicas: [],
-             mantPreventivo: [],
-             mantCorrectivo: [],
-             img:""
- 
-         });
-         setTimeout(() => {
-             setMostrarModal(false);
-             setMensajeConfirmacion("");
-         }, 3000)
-         
-     } */
-
     const agregarEquipo = async (e) => {
         e.preventDefault();
 
@@ -85,6 +50,8 @@ const ModalNewEquipment = ({ equiposIniciales, setEquiposIniciales, mostrarModal
             nombre: nuevoEquipo.nombre,
             descripcion: nuevoEquipo.descripcion,
             tipoDispositivo: nuevoEquipo.tipoDispositivo,
+            activoEnInventario: nuevoEquipo.activoEnInventario,
+            ubicacion: nuevoEquipo.ubicacion || "sin ubicacion en el inventario",
             nivelRiesgo: nuevoEquipo.nivelRiesgo,
             nomAplicada: nuevoEquipo.nomAplicada,
             caracteristicas: parseList(nuevoEquipo.caracteristicas),
@@ -100,7 +67,7 @@ const ModalNewEquipment = ({ equiposIniciales, setEquiposIniciales, mostrarModal
                 headers: {
                     'Content-type': 'application/json'
                 },
-                credentials : 'include',
+                credentials: 'include',
                 body: JSON.stringify(agregarEquipo)
             });
 
@@ -121,6 +88,8 @@ const ModalNewEquipment = ({ equiposIniciales, setEquiposIniciales, mostrarModal
                 nombre: "",
                 descripcion: "",
                 tipoDispositivo: "",
+                activoEnInventario: "",
+                ubicacion: "",
                 nivelRiesgo: "",
                 nomAplicada: "",
                 caracteristicas: [],
@@ -142,6 +111,24 @@ const ModalNewEquipment = ({ equiposIniciales, setEquiposIniciales, mostrarModal
 
     if (!mostrarModal) return null;
 
+    const renderUbication = () => {
+        if (nuevoEquipo.activoEnInventario === 'si') {
+            return (
+                <>
+                    <TagsContainer><MapPinned size={20} color={IconColor.text} style={{ margin: "10px 0px" }} />Ubicacion: </TagsContainer>
+                    <FormField
+                        name="ubicacion"
+                        placeholder="define su ubicacion"
+                        value={nuevoEquipo.ubicacion}
+                        onChange={handleCambio}
+                        required
+                    />
+                </>
+            )
+        }
+
+    }
+    
     return (
         <ModalBackground onClick={() => setMostrarModal(false)}>
             <ModalContent onClick={(e) => e.stopPropagation()}>
@@ -156,7 +143,7 @@ const ModalNewEquipment = ({ equiposIniciales, setEquiposIniciales, mostrarModal
                         required
                     />
 
-                    <dt><FileText size={20} color={IconColor.text} style={{ margin: "0px 10px" }} />Descripcion:</dt>
+                    <TagsContainer><FileText size={20} color={IconColor.text} style={{ margin: "0px 10px" }} />Descripcion:</TagsContainer>
                     <TextArea
                         name="descripcion"
                         placeholder="Descripcion del equipo"
@@ -165,7 +152,7 @@ const ModalNewEquipment = ({ equiposIniciales, setEquiposIniciales, mostrarModal
                         required
                     />
 
-                    <dt><FileText size={20} color={IconColor.text} style={{ margin: "0px 10px" }} />Tipo de Dispositivo:</dt>
+                    <TagsContainer><FileText size={20} color={IconColor.text} style={{ margin: "0px 10px" }} />Tipo de Dispositivo:</TagsContainer>
                     <TextArea
                         name="tipoDispositivo"
                         placeholder="tipo de dispositivo"
@@ -174,7 +161,36 @@ const ModalNewEquipment = ({ equiposIniciales, setEquiposIniciales, mostrarModal
                         required
                     />
 
-                    <dt><AlertCircle size={20} color={IconColor.risk} style={{ margin: "0px 10px" }} />Nivel de Riesgo:</dt>
+                    <TagsContainer><CloudUploadIcon size={20} color={IconColor.text} style={{ margin: "0px 10px" }} />¿Esta activo en el inventario?:</TagsContainer>
+                    <div size={20} color={IconColor.text} style={{ margin: "20px 10px" }}>
+                        <label size={20} color={IconColor.text}>
+                            <input
+                                type='radio'
+                                name="activoEnInventario"
+                                value='si'
+                                checked={nuevoEquipo.activoEnInventario === 'si'}
+                                onChange={handleCambio}
+                                required
+                            />
+                            Si
+                        </label>
+                        <label size={20} color={IconColor.text}>
+                            <input
+                                type='radio'
+                                name="activoEnInventario"
+                                value='no'
+                                checked={nuevoEquipo.activoEnInventario === 'no'}
+                                onChange={handleCambio}
+                                required
+                            />
+                            No
+                        </label>
+                        {renderUbication()}
+                    </div>
+
+                    
+
+                    <TagsContainer><AlertCircle size={20} color={IconColor.risk} style={{ margin: "0px 10px" }} />Nivel de Riesgo:</TagsContainer>
                     <FormField
                         name="nivelRiesgo"
                         placeholder="Nivel de riesgo"
@@ -183,7 +199,7 @@ const ModalNewEquipment = ({ equiposIniciales, setEquiposIniciales, mostrarModal
                         required
                     />
 
-                    <dt><ClipboardList size={20} color={IconColor.checklist} style={{ margin: "0px 10px" }} />NOM Aplicada:</dt>
+                    <TagsContainer><ClipboardList size={20} color={IconColor.checklist} style={{ margin: "0px 10px" }} />NOM Aplicada:</TagsContainer>
                     <TextArea
                         name="nomAplicada"
                         placeholder="Norma de Mantenmiento aplicada"
@@ -192,7 +208,7 @@ const ModalNewEquipment = ({ equiposIniciales, setEquiposIniciales, mostrarModal
                         required
                     />
 
-                    <dt><Wrench size={20} color={IconColor.wrench} style={{ margin: "0px 10px" }} />Caracteristicas: </dt>
+                    <TagsContainer><Wrench size={20} color={IconColor.wrench} style={{ margin: "0px 10px" }} />Caracteristicas: </TagsContainer>
                     <TextArea
                         name="caracteristicas"
                         placeholder="Caracteristicas (una por linea)"
@@ -201,7 +217,7 @@ const ModalNewEquipment = ({ equiposIniciales, setEquiposIniciales, mostrarModal
                         required
                     />
 
-                    <dt><Drill size={20} color={IconColor.drill} style={{ margin: "0px 10px" }} />Mantenimiento Correctivo: </dt>
+                    <TagsContainer><Drill size={20} color={IconColor.drill} style={{ margin: "0px 10px" }} />Mantenimiento Correctivo: </TagsContainer>
                     <TextArea
                         name="mantCorrectivo"
                         placeholder="Ingresa el Mantenimineto Correctivo (una por linea)"
@@ -211,7 +227,7 @@ const ModalNewEquipment = ({ equiposIniciales, setEquiposIniciales, mostrarModal
                     />
 
 
-                    <dt><HardHat size={20} color={IconColor.tool} style={{ margin: "0px 10px" }} />Mantenimiento Preventivo: </dt>
+                    <TagsContainer><HardHat size={20} color={IconColor.tool} style={{ margin: "0px 10px" }} />Mantenimiento Preventivo: </TagsContainer>
                     <TextArea
                         name="mantPreventivo"
                         placeholder="Ingresa el Mantenimineto Preventivo (una por linea)"
@@ -220,8 +236,8 @@ const ModalNewEquipment = ({ equiposIniciales, setEquiposIniciales, mostrarModal
                         required
                     />
 
-                    
-                    <dt><ImagePlus size={20} color={IconColor.imagePlus} style={{ margin: "0px 10px" }} />Imagen del Equipo: </dt>
+
+                    <TagsContainer><ImagePlus size={20} color={IconColor.imagePlus} style={{ margin: "0px 10px" }} />Imagen del Equipo: </TagsContainer>
                     <FormField
                         name="img"
                         placeholder="https://..."

@@ -32,31 +32,6 @@ const RenderAllEquipment = ({ busqueda, equiposAMostrar = [], equiposIniciales, 
     const [equipoAEliminar, setEquipoAEliminar] = useState(null);
 
     //FUNCION QUE FILTRA LOS EQUIPOS POR NOMBRE O NIVEL DE RIESGO
-    /*const equiposBuscar = busqueda.toLowerCase();
-    const equiposEncontrados = equiposIniciales.filter(
-        equipo =>
-            (equipo.nombre?.toLowerCase() || '').includes(equiposBuscar) || 
-            (equipo.nivelRiesgo?.toLowerCase() || '').includes(equiposBuscar)
-    );
-
-    console.log(equiposEncontrados);
-
-    const equiposAMostrar = busqueda === "" ? equiposIniciales : equiposEncontrados;
-
-    if (busqueda !== "" && equiposEncontrados.length === 0) {
-        return (
-            <ContainerMsgNotFound>
-                <label>No se encontraron resultados</label>
-            </ContainerMsgNotFound>
-        );
-    }*/
-    /*if (equiposAMostrar.length === 0) {
-        return (
-            <ContainerMsgNotFound>
-                <label>No se encontraron resultados</label>
-            </ContainerMsgNotFound>
-        );
-    }*/
 
     if (cargando) return <p>Cargando Equipos...</p>
     if (error) {
@@ -76,21 +51,13 @@ const RenderAllEquipment = ({ busqueda, equiposAMostrar = [], equiposIniciales, 
             </ContainerMsgNotFound>
         );
     }
-    /* if (busqueda === "") return RenderResults(equiposIniciales);
-     if (equiposEncontrados == false) return (
-         <ContainerMsgNotFound>
-             <label>No se encontraron resultados</label>
-         </ContainerMsgNotFound>
-     )
-     return RenderResults(equiposEncontrados) */
 
     return (
         <>
             <GridEquipos>
                 {
                     equiposAMostrar.map((equipo, i) => {
-                        //const {nombre, descripcion, nivelRiesgo, nomAplicada, caracteristicas, mantPreventivo, mantCorrectivo} = equipo;
-
+                        
                         return (
                             <CardEquipos key={equipo.id || i}>
                                 <CardEquiposImgContainer>
@@ -103,8 +70,14 @@ const RenderAllEquipment = ({ busqueda, equiposAMostrar = [], equiposIniciales, 
                                         <dt><FileText size={18} color={IconColor.text} />Descripcion:</dt>
                                         <dd>{equipo.descripcion}</dd>
 
-                                        <dt><FileText size={18} color={IconColor.text} />Tipo de Dispositivo: :</dt>
+                                        <dt><FileText size={18} color={IconColor.text} />Tipo de Dispositivo:</dt>
                                         <dd>{equipo.tipoDispositivo}</dd>
+
+                                        <dt><FileText size={18} color={IconColor.text} />Activo en el inventario:</dt>
+                                        <dd>{equipo.activoEnInventario}</dd>
+
+                                        <dt><FileText size={18} color={IconColor.text} />Ubicacion:</dt>
+                                        <dd>{equipo.ubicacion}</dd>
 
                                         <dt><AlertCircle size={18} color={IconColor.risk} />Nivel de Riesgo:</dt>
                                         <dd>{equipo.nivelRiesgo}</dd>
