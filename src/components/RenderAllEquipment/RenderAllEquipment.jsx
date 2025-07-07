@@ -57,7 +57,7 @@ const RenderAllEquipment = ({ busqueda, equiposAMostrar = [], equiposIniciales, 
             <GridEquipos>
                 {
                     equiposAMostrar.map((equipo, i) => {
-                        
+
                         return (
                             <CardEquipos key={equipo.id || i}>
                                 <CardEquiposImgContainer>

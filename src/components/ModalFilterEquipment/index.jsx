@@ -65,7 +65,7 @@ const ModalFilterEquipment = ({ mostrarModalEquiposPorFiltro, setMostrarModalEqu
     const [mantCorrectivo, setMantCorrectivo] = useState('');
     const [mensajeConfirmacion, setMensajeConfirmacion] = useState("");
 
-    const parseList = (texto) => texto.split("\n").map((item) => item.trim()).filter(Boolean);
+
 
     const arbolNoInvasivo = {
         question: "¿El dispositivo esta destinado a la conduccion o almacenamiento para perfusion,administarcion o introduccion en el cuerpo?",
@@ -734,6 +734,9 @@ const ModalFilterEquipment = ({ mostrarModalEquiposPorFiltro, setMostrarModalEqu
 
             setResultado(option.result);
             const usuario_id = userSession?.id || null;
+            console.log("Usuario en sesión:", userSession);
+            console.log("ID usuario:", usuario_id);
+
 
             const equipoModal = {
                 nombre: equipo,
@@ -748,7 +751,7 @@ const ModalFilterEquipment = ({ mostrarModalEquiposPorFiltro, setMostrarModalEqu
                 }].filter(r => r.respuesta === "Si"),
                 nivelRiesgo: option.result,
                 nomAplicada: nomAplicada || 'No especificada',
-                
+
                 mantPreventivo: mantPreventivo ? mantPreventivo.split('\n').map(p => p.trim()) : ['Sin mantenimiento preventivo definido'],
                 mantCorrectivo: mantCorrectivo ? mantCorrectivo.split('\n').map(c => c.trim()) : ['Sin mantenimiento correctivo definido'],
                 agregadoPor: nombreUsuarioEnSesion,
