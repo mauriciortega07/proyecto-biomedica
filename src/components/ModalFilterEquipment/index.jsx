@@ -753,7 +753,7 @@ const ModalFilterEquipment = ({ mostrarModalEquiposPorFiltro, setMostrarModalEqu
                 mantCorrectivo: mantCorrectivo ? mantCorrectivo.split('\n').map(c => c.trim()) : ['Sin mantenimiento correctivo definido'],
                 agregadoPor: nombreUsuarioEnSesion,
                 fechaAgregado: fechaActual,
-                usuario_id
+                usuario_id: usuario_id
             };
 
 

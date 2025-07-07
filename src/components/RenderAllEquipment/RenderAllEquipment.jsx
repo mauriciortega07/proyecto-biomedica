@@ -118,9 +118,9 @@ const RenderAllEquipment = ({ busqueda, equiposAMostrar = [], equiposIniciales, 
                                             </ul>
                                         </dd>
 
-                                        {equipo.editadoPor && (
+                                        {equipo.usuario_id && (
                                             <p style={{ fontStyle: "italic", fontSize: "0.9rem" }}>
-                                                Editado por: <strong>{equipo.editadoPor}</strong>
+                                                Editado por: <strong>{equipo.usuario_id}</strong>
                                             </p>
                                         )}
 
@@ -130,15 +130,15 @@ const RenderAllEquipment = ({ busqueda, equiposAMostrar = [], equiposIniciales, 
                                             </p>
                                         )}
 
-                                        {equipo.agregadoPor && (
+                                        {equipo.usuario_id && (
                                             <p style={{ fontStyle: "italic", fontSize: "0.9rem" }}>
-                                                Agregado por: {equipo.agregadoPor}
+                                                Agregado por: {equipo.usuario_id}
                                             </p>
                                         )}
 
                                         {equipo.fechaAgregado && (
                                             <p style={{ fontStyle: "italic", fontSize: "0.8rem", color: "#666" }}>
-                                                Agregado el: {equipo.fechaAgregado}
+                                                Agregado el: {equipo.usuario_id}
                                             </p>
                                         )}
 

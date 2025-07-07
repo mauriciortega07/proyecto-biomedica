@@ -58,7 +58,7 @@ const ModalNewEquipment = ({ equiposIniciales, setEquiposIniciales, mostrarModal
             mantCorrectivo: parseList(nuevoEquipo.mantCorrectivo),
             mantPreventivo: parseList(nuevoEquipo.mantPreventivo),
             img: nuevoEquipo.img,
-            usuario_id
+            usuario_id: usuario_id
         }
 
         try {
