@@ -63,7 +63,7 @@ const RenderAllEquipment = ({ busqueda, equiposAMostrar = [], equiposIniciales, 
                                 <CardEquiposImgContainer>
                                     <img style={{ width: "350px", height: "350px", objectFit: "cover" }} src={equipo.img} />
                                 </CardEquiposImgContainer>
-                                <article style={{ display: "flex", justifyContent: "space-evenly" }}>
+                                <article style={{ display: "flex", justifyContent: "space-evenly", width:"50%" }}>
                                     <SectionInfoEquipos className='infoEquipos'>
                                         <dd style={{ fontWeight: "bolder", fontSize: "clamp(1rem, 2vw, 2rem)", margin: "1rem 0rem" }}>{equipo.nombre}</dd>
 
@@ -118,9 +118,9 @@ const RenderAllEquipment = ({ busqueda, equiposAMostrar = [], equiposIniciales, 
                                             </ul>
                                         </dd>
 
-                                        {equipo.usuario_id && (
+                                        {equipo.editadoPor && (
                                             <p style={{ fontStyle: "italic", fontSize: "0.9rem" }}>
-                                                Editado por: <strong>{equipo.usuario_id}</strong>
+                                                Editado por: <strong>{equipo.editadoPor}</strong>
                                             </p>
                                         )}
 
@@ -130,15 +130,15 @@ const RenderAllEquipment = ({ busqueda, equiposAMostrar = [], equiposIniciales, 
                                             </p>
                                         )}
 
-                                        {equipo.usuario_id && (
+                                        {equipo.agregadoPor && (
                                             <p style={{ fontStyle: "italic", fontSize: "0.9rem" }}>
-                                                Agregado por: {equipo.usuario_id}
+                                                Agregado por: {equipo.agregadoPor}
                                             </p>
                                         )}
 
                                         {equipo.fechaAgregado && (
                                             <p style={{ fontStyle: "italic", fontSize: "0.8rem", color: "#666" }}>
-                                                Agregado el: {equipo.usuario_id}
+                                                Agregado el: {equipo.fechaAgregado}
                                             </p>
                                         )}
 

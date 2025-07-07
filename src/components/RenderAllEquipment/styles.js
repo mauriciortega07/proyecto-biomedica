@@ -33,6 +33,7 @@ const CardEquipos = styled.section`
 const CardEquiposImgContainer = styled.div`
     display: flex;
     align-items: center;
+    width: 50%;
     
 `
 

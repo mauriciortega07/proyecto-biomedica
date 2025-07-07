@@ -44,7 +44,13 @@ const ModalNewEquipment = ({ equiposIniciales, setEquiposIniciales, mostrarModal
         e.preventDefault();
 
         const userSession = JSON.parse(localStorage.getItem("user_session"));
-        const usuario_id = userSession?.id;
+        const nombreUsuarioEnSesion = userSession?.name || "Anonimo";
+        const fechaActual = new Date().toLocaleString('es-MX', {
+            day: '2-digit', month: 'numeric', year: 'numeric',
+            hour: '2-digit', minute: '2-digit', second: '2-digit',
+            hour12: true,
+        });
+        const usuario_id = userSession?.id || null;
 
         const agregarEquipo = {
             nombre: nuevoEquipo.nombre,
@@ -58,7 +64,9 @@ const ModalNewEquipment = ({ equiposIniciales, setEquiposIniciales, mostrarModal
             mantCorrectivo: parseList(nuevoEquipo.mantCorrectivo),
             mantPreventivo: parseList(nuevoEquipo.mantPreventivo),
             img: nuevoEquipo.img,
-            usuario_id: usuario_id
+            usuario_id: usuario_id,
+            agregadoPor: nombreUsuarioEnSesion,
+            fechaAgregado: fechaActual
         }
 
         try {
@@ -128,7 +136,7 @@ const ModalNewEquipment = ({ equiposIniciales, setEquiposIniciales, mostrarModal
         }
 
     }
-    
+
     return (
         <ModalBackground onClick={() => setMostrarModal(false)}>
             <ModalContent onClick={(e) => e.stopPropagation()}>
@@ -188,7 +196,7 @@ const ModalNewEquipment = ({ equiposIniciales, setEquiposIniciales, mostrarModal
                         {renderUbication()}
                     </div>
 
-                    
+
 
                     <TagsContainer><AlertCircle size={20} color={IconColor.risk} style={{ margin: "0px 10px" }} />Nivel de Riesgo:</TagsContainer>
                     <FormField

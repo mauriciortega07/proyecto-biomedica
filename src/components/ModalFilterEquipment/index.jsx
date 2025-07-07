@@ -40,10 +40,12 @@ function normalizarEquipo(equipoModal) {
         caracteristicas: equipoModal.caracteristicas || (equipoModal.respuestasSi?.length > 0 ? equipoModal.respuestasSi?.map(r => `${r.caracteristica} → Si`) : ['Sin características definidas']),
         mantPreventivo: equipoModal.mantPreventivo || [],
         mantCorrectivo: equipoModal.mantCorrectivo || [],
-        editadoPor: equipoModal.editadoPor || '',
-        fechaModificacion: equipoModal.fechaModificacion || '',
+        //editadoPor: equipoModal.editadoPor || '',
+        //fechaModificacion: equipoModal.fechaModificacion || '',
+        usuario_id: equipoModal.usuario_id,
         agregadoPor: equipoModal.agregadoPor || '',
-        fechaAgregado: equipoModal.fechaAgregado || '',
+        fechaAgregado: equipoModal.fechaAgregado || ''
+        
 
     };
 }
@@ -751,12 +753,11 @@ const ModalFilterEquipment = ({ mostrarModalEquiposPorFiltro, setMostrarModalEqu
                 }].filter(r => r.respuesta === "Si"),
                 nivelRiesgo: option.result,
                 nomAplicada: nomAplicada || 'No especificada',
-
                 mantPreventivo: mantPreventivo ? mantPreventivo.split('\n').map(p => p.trim()) : ['Sin mantenimiento preventivo definido'],
                 mantCorrectivo: mantCorrectivo ? mantCorrectivo.split('\n').map(c => c.trim()) : ['Sin mantenimiento correctivo definido'],
+                usuario_id: usuario_id,
                 agregadoPor: nombreUsuarioEnSesion,
-                fechaAgregado: fechaActual,
-                usuario_id: usuario_id
+                fechaAgregado: fechaActual
             };
 
 

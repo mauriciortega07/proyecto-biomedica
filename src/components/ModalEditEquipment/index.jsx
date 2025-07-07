@@ -71,6 +71,11 @@ const ModalEditEquipment = ({ equipoAEditar, modalEditEquipment, setModalEditEqu
 
         const userSession = JSON.parse(localStorage.getItem("user_session"));
         const nombreUsuarioEnSesion = userSession?.name || "Anonimo";
+        const fechaModificacion = new Date().toLocaleString('es-MX', {
+            day: '2-digit', month: 'numeric', year: 'numeric',
+            hour: '2-digit', minute: '2-digit', second: '2-digit',
+            hour12: true,
+        });
 
         const updateEquipo = {
             ...equipoEditado,
@@ -78,7 +83,7 @@ const ModalEditEquipment = ({ equipoAEditar, modalEditEquipment, setModalEditEqu
             mantPreventivo: equipoEditado.mantPreventivo.split('\n').filter(Boolean),
             mantCorrectivo: equipoEditado.mantCorrectivo.split('\n').filter(Boolean),
             editadoPor: nombreUsuarioEnSesion,
-            fechaModificacion: new Date().toLocaleString()
+            fechaModificacion: fechaModificacion
         };
 
         try {

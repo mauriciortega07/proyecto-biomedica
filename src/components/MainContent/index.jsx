@@ -19,18 +19,7 @@ const MainContent = ({ equiposBiomedicos, setEquiposBiomedicos }) => {
 
 
     //CRAGA DATOS DESDE EL LOCALSTORAGE
-    /*useEffect(() => {
-        const datosGuardados = getEquiposData();
-        console.log("TodosEquipos - datos guardados:", datosGuardados);
-        setEquiposIniciales(datosGuardados);
-    }, []) 
-
-    //SINCRONIZAR EL LOCALSTORAGE CON LOS CMABIOS QUE SE HAGAN
-    useEffect(() => {
-        localStorage.setItem("equiposBiomedicos", JSON.stringify(equiposIniciales));
-    }, [equiposIniciales]) */
-
-    // Función para convertir texto multilinea a array
+    
     function parseMultilineString(text) {
         if (typeof text !== "string") return [];
         return text
