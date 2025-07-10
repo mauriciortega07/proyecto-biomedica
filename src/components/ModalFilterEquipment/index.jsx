@@ -33,7 +33,7 @@ function normalizarEquipo(equipoModal) {
         img: equipoModal.img || equipoModal.imagen || 'https://via.placeholder.com/350',
         descripcion: equipoModal.descripcion || '',
         tipoDispositivo: equipoModal.tipoDispositivo || 'No definido',
-        activoEnInventario: equipoModal.activoEnInventario,
+        activoEnInventario: equipoModal.activoEnInventario || "no",
         ubicacion: equipoModal.ubicacion || 'sin ubicacion en el inventaro',
         nivelRiesgo: equipoModal.nivelRiesgo || 'No definido',
         nomAplicada: equipoModal.nomAplicada || '',
