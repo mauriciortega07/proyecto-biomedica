@@ -12,12 +12,7 @@ const ModalDeleteEquipment = ({ equipoAEliminar, setModalDeleteEquipment, equipo
     const [confirmar, setConfirmar] = useState(false);
     const [error, setError] = useState(null);
 
-    /*const handleDeleteEquipment = () => {
-        const nuevaLista = equiposIniciales.filter(equipo => equipo.id !== equipoAEliminar.id);
-        setEquiposIniciales(nuevaLista);
-        setConfirmar(true);
-    };*/
-
+  
     const handleDeleteEquipment = async () => {
         try {
             const response = await fetch(`https://backend-proyecto-biomedica-production.up.railway.app/equipos_biomedicos/${equipoAEliminar.id}`, {
@@ -53,18 +48,7 @@ const ModalDeleteEquipment = ({ equipoAEliminar, setModalDeleteEquipment, equipo
         <ModalBackground>
             <ModalContent>
                 <TitleModal>Eliminar Equipo</TitleModal>
-                {/*{!confirmar ? (
-                    <>
-                        <p>¿Estás seguro que deseas eliminar: <strong>{equipoAEliminar.nombre}</strong>?</p>
-                        <ButtonsContainer>
-                            <ButtonCancelled onClick={() => setModalDeleteEquipment(false)}>Cancelar</ButtonCancelled>
-                            <ButtonSaveEquipment onClick={handleDeleteEquipment}>Eliminar</ButtonSaveEquipment>
-                        </ButtonsContainer>
-                    </>
-                ) : (
-                    <p>Equipo eliminado correctamente</p>
-                )} */}
-
+                
                 {error && <p>{error}</p>}
 
                 {!confirmar && !error ? (

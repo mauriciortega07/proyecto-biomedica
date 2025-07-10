@@ -12,14 +12,7 @@ const AsideCategories = ({ listaEquipos = [], onCategoriaSeleccionada, categoria
     return (
         <AsideContainer>
             <UnorderListContainer>
-                {/*
-                    //SE MUESTRAN LAS CATEGORIAS UNICAS EN UNA LISTA
-                    uniqueCategories.map(riesgo => <li key={riesgo}><a href="#">{riesgo}</a></li> )
-                 */}
-                {/*<li><a href="/Inicio">Todos los equipos</a></li>
-                <li><a href="/Medio(Clase 2)">Medio(Clase 2)</a></li>
-                <li><a href="/Alto(Clase 3)">Alto(Clase 3)</a></li>*/}
-
+               
                 <li>
                     <EnlaceCategories onClick={() => onCategoriaSeleccionada("Todos")} className={categoriaSeleccionada === "Todos" ? "activo" : ""}>Todos los equipos</EnlaceCategories>
                 </li>

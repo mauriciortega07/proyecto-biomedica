@@ -31,8 +31,8 @@ const UserAcces = ({ logoImg }) => {
                     {
                         signinShow || (
                             <>
-                                <p style={{padding:"1rem", fontSize: "20px"}}>¿No tienes una cuenta?</p>
-                                <CreateUserButton className="createAccount" onClick={ShowSign}>Crear una cuenta</CreateUserButton>
+                                <p style={{padding:"1rem", fontSize: "20px"}}>¿No tienes un usuario creado?</p>
+                                <CreateUserButton className="createAccount" onClick={ShowSign}>Crear usuario</CreateUserButton>
                             </>
                         )
                     }

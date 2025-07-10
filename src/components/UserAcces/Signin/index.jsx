@@ -59,19 +59,6 @@ const Signin = () => {
                     />
                 </FormElement>
 
-                {/*<FormElement>
-                    <label for="email">correo: </label>
-                    <input
-                        id="email"
-                        type="text"
-                        name="email"
-                        value={form.email}
-                        onChange = {(e) => handleInputChange(e)}
-                        placeholder="ingresa tu correo"
-                        required
-                    />
-                </FormElement>*/}
-
                 <FormElement>
                     <label for="password">contraseña</label>
                     <input

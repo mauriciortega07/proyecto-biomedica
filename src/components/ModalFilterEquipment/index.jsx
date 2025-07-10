@@ -940,7 +940,8 @@ const ModalFilterEquipment = ({ mostrarModalEquiposPorFiltro, setMostrarModalEqu
                 ) : (
                     <>
                         <TitleModal>Equipo: {equipo}</TitleModal>
-                        <TitleModal>Resultado final: {resultado}</TitleModal>
+                        <TitleModal>Tipo de Dispositivo: {tipoDispositivo}</TitleModal>
+                        <TitleModal>Nivel de Riesgo: {resultado}</TitleModal>
                         <ButtonOther onClick={handleReiniciarArbol}>Evaluar Otro</ButtonOther>
                         <ButtonRestart onClick={handleReiniciarArbol}>Reiniciar</ButtonRestart>
                     </>
