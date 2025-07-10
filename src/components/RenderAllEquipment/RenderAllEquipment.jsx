@@ -73,7 +73,7 @@ const RenderAllEquipment = ({ busqueda, equiposAMostrar = [], equiposIniciales, 
                                         <dt><FileText size={18} color={IconColor.text} />Tipo de Dispositivo:</dt>
                                         <dd>{equipo.tipoDispositivo}</dd>
 
-                                        <dt><FileText size={18} color={IconColor.text} />Activo en el inventario:</dt>
+                                        <dt><FileText size={18} color={IconColor.text}/>Activo en el inventario:</dt>
                                         <dd>{equipo.activoEnInventario}</dd>
 
                                         <dt><FileText size={18} color={IconColor.text} />Ubicacion:</dt>

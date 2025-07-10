@@ -20,10 +20,7 @@ const useEquiposBiomedicos= () => {
   const [error, setError] = useState(null);
   const [cargando, setCargando] = useState(true);
 
-    
-    //const equiposBiomedicos = getEquiposData();
-    //console.log(equiposBiomedicos);
-  
+
     useEffect(() => {
       const fetchEquipos = async () => {
         try {

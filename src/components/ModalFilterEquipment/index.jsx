@@ -838,6 +838,7 @@ const ModalFilterEquipment = ({ mostrarModalEquiposPorFiltro, setMostrarModalEqu
                             value={equipo}
                             onChange={(e) => setEquipo(e.target.value)}
                             placeholder="nombre del equipo"
+                            required
                         />
 
                         <TagsContainer><ClipboardList size={20} color={IconColor.checklist} style={{ margin: "0px 10px" }} />Tipo de Dispositivo:</TagsContainer>
@@ -845,6 +846,7 @@ const ModalFilterEquipment = ({ mostrarModalEquiposPorFiltro, setMostrarModalEqu
                             style={{ width: "100%", padding: "8px", borderRadius: "5px", marginBottom: "1rem" }}
                             value={tipoDispositivo}
                             onChange={(e) => setTipoDispositivo(e.target.value)}
+                            required
                         >
                             <option value="">Seleccionar tipo...</option>
                             <option value="dispositivo medico no invasivo">Dispositivo médico no invasivo</option>

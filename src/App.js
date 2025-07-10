@@ -7,10 +7,8 @@ import Theme from "./theme"
 import GlobalStyles from "./theme/GlobalStyles";
 import { useEffect, useState } from "react";
 import useEquiposBiomedicos from "./data/useEquiposBiomedicos";
-//import getEquiposData from "./data/getEquiposData"
-//import {getEquiposData} from "./data/getEquiposData";
+
 function App() {
-  //const [equiposBiomedicos, setEquiposBiomedicos] = useState([]);
   const { equiposBiomedicos, setEquiposBiomedicos, cargando, error } = useEquiposBiomedicos();
 
   return (
