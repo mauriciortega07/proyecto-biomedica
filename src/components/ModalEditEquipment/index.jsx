@@ -185,6 +185,24 @@ const ModalEditEquipment = ({ equipoAEditar, modalEditEquipment, setModalEditEqu
                     required
                 />
 
+                <TagsContainer><FileText size={20} color={IconColor.text} style={{ margin: "0px 10px" }} />N° de Inventario: </TagsContainer>
+                <FormField
+                    name="numInventario"
+                    placeholder="define su numero en el inventario"
+                    value={equipoEditado.numInventario}
+                    onChange={handleInputChange}
+                    required
+                />
+
+                <TagsContainer><FileText size={20} color={IconColor.text} style={{ margin: "0px 10px" }} />N° de Serie del Equipo: </TagsContainer>
+                <FormField
+                    name="numSerieEquipo"
+                    placeholder="define el numero de serie del equipo"
+                    value={equipoEditado.numSerieEquipo}
+                    onChange={handleInputChange}
+                    required
+                />
+
                 <TagsContainer><FileText size={20} color={IconColor.text} style={{ margin: "0px 10px" }} />Tipo de Dispositivo:</TagsContainer>
                 <TextArea
                     name="tipoDispositivo"

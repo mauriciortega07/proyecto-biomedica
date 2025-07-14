@@ -1,4 +1,4 @@
-import { FileText, AlertCircle, ClipboardList, Wrench, HardHat, Drill, Cable, ImagePlus, CloudUploadIcon, MapPinned } from 'lucide-react';
+import { FileText, AlertCircle, ClipboardList, Wrench, HardHat, Drill, Cable, ImagePlus, CloudUploadIcon, MapPinned, FileDigit } from 'lucide-react';
 import { useState } from "react";
 import { ModalBackground, ModalContent, FormField, TextArea, TitleModal, ButtonSaveEquipment, TagsContainer } from "./styles";
 const IconColor = {
@@ -23,6 +23,8 @@ const ModalNewEquipment = ({ equiposIniciales, setEquiposIniciales, mostrarModal
         tipoDispositivo: "",
         activoEnInventario: "",
         ubicacion: "",
+        numInventario: "",
+        numSerieEquipo: "",
         nivelRiesgo: "",
         nomAplicada: "",
         caracteristicas: [],
@@ -58,6 +60,8 @@ const ModalNewEquipment = ({ equiposIniciales, setEquiposIniciales, mostrarModal
             tipoDispositivo: nuevoEquipo.tipoDispositivo,
             activoEnInventario: nuevoEquipo.activoEnInventario,
             ubicacion: nuevoEquipo.ubicacion || "sin ubicacion en el inventario",
+            numInventario: nuevoEquipo.numInventario || "sin numero de inventario",
+            numSerieEquipo: nuevoEquipo.numSerieEquipo || "sin numero de serie asignado",
             nivelRiesgo: nuevoEquipo.nivelRiesgo,
             nomAplicada: nuevoEquipo.nomAplicada,
             caracteristicas: parseList(nuevoEquipo.caracteristicas),
@@ -98,6 +102,8 @@ const ModalNewEquipment = ({ equiposIniciales, setEquiposIniciales, mostrarModal
                 tipoDispositivo: "",
                 activoEnInventario: "",
                 ubicacion: "",
+                numInventario: "",
+                numSerieEquipo: "",
                 nivelRiesgo: "",
                 nomAplicada: "",
                 caracteristicas: [],
@@ -123,11 +129,29 @@ const ModalNewEquipment = ({ equiposIniciales, setEquiposIniciales, mostrarModal
         if (nuevoEquipo.activoEnInventario === 'si') {
             return (
                 <>
-                    <TagsContainer><MapPinned size={20} color={IconColor.text} style={{ margin: "10px 0px" }} />Ubicacion: </TagsContainer>
+                    <TagsContainer><MapPinned size={20} color={IconColor.text} style={{ margin: "10px 10px" }} />Ubicacion: </TagsContainer>
                     <FormField
                         name="ubicacion"
                         placeholder="define su ubicacion"
                         value={nuevoEquipo.ubicacion}
+                        onChange={handleCambio}
+                        required
+                    />
+
+                    <TagsContainer><FileDigit size={20} color={IconColor.text} style={{ margin: "10px 10px" }} />N° de inventario: </TagsContainer>
+                    <FormField
+                        name="numInventario"
+                        placeholder="define su numero de inventario"
+                        value={nuevoEquipo.numInventario}
+                        onChange={handleCambio}
+                        required
+                    />
+
+                    <TagsContainer><FileDigit size={20} color={IconColor.text} style={{ margin: "10px 10px" }} />N° de Serie del Equipo: </TagsContainer>
+                    <FormField
+                        name="numSerieEquipo"
+                        placeholder="define su numero de serie"
+                        value={nuevoEquipo.numSerieEquipo}
                         onChange={handleCambio}
                         required
                     />

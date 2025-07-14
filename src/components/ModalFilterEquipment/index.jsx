@@ -1,4 +1,4 @@
-import { FileText, AlertCircle, ClipboardList, Wrench, HardHat, Drill, Cable, ImagePlus, CloudUploadIcon, MapPinned } from 'lucide-react';
+import { FileText, AlertCircle, ClipboardList, Wrench, HardHat, Drill, Cable, ImagePlus, CloudUploadIcon, MapPinned, FileDigit } from 'lucide-react';
 import {
     ModalBackground, ModalContent,
     FormField,
@@ -8,7 +8,7 @@ import {
     ButtonYes,
     ButtonRestart,
     ButtonOther,
-    TagsContainer
+    TagsContainer,
 } from "./styles";
 import { useState, useEffect, lazy, use } from "react";
 const IconColor = {
@@ -26,7 +26,16 @@ const IconColor = {
 
 }
 
+
 function normalizarEquipo(equipoModal) {
+    const caracteristicasSi = equipoModal.respuestasSi?.map(r => `${r.caracteristica} → Si`) || [];
+    /*const caracteristicasNo = equipoModal.respuestasNo?.map(r => `${r.caracteristica} → No`) || [];
+    const todasCaracteristicas = [
+        ...caracteristicasSi.map(r => `${r}`),
+        ...caracteristicasNo.map(r => `${r}`)
+    ];
+    console.log(todasCaracteristicas);*/
+
     return {
         id: equipoModal.id || `${equipoModal.nombre}-${Date.now()}`,
         nombre: equipoModal.nombre || 'Sin nombre',
@@ -35,9 +44,11 @@ function normalizarEquipo(equipoModal) {
         tipoDispositivo: equipoModal.tipoDispositivo || 'No definido',
         activoEnInventario: equipoModal.activoEnInventario || "no",
         ubicacion: equipoModal.ubicacion || 'sin ubicacion en el inventaro',
+        numInventario: equipoModal.numInventario || "sin numero de inventario",
+        numSerieEquipo: equipoModal.numSerieEquipo || "sin numero de serie",
         nivelRiesgo: equipoModal.nivelRiesgo || 'No definido',
         nomAplicada: equipoModal.nomAplicada || '',
-        caracteristicas: equipoModal.caracteristicas || (equipoModal.respuestasSi?.length > 0 ? equipoModal.respuestasSi?.map(r => `${r.caracteristica} → Si`) : ['Sin características definidas']),
+        caracteristicas: caracteristicasSi.length >= 0 ? caracteristicasSi.map(r => r.trim()).join('\n') : ['Sin características definidas'],  //equipoModal.caracteristicas || (equipoModal.respuestasSi?.length > 0 ? equipoModal.respuestasSi?.map(r => `${r.caracteristica} → Si`) : ['Sin características definidas']),
         mantPreventivo: equipoModal.mantPreventivo || [],
         mantCorrectivo: equipoModal.mantCorrectivo || [],
         //editadoPor: equipoModal.editadoPor || '',
@@ -45,8 +56,6 @@ function normalizarEquipo(equipoModal) {
         usuario_id: equipoModal.usuario_id,
         agregadoPor: equipoModal.agregadoPor || '',
         fechaAgregado: equipoModal.fechaAgregado || ''
-        
-
     };
 }
 
@@ -58,9 +67,12 @@ const ModalFilterEquipment = ({ mostrarModalEquiposPorFiltro, setMostrarModalEqu
     const [resultado, setResultado] = useState(null);
     const [imagenUrl, setImagenUrl] = useState('');
     const [respuestasSi, setRespuestasSi] = useState([]);
+    const [respuestasNo, setRespuestasNo] = useState([]);
     const [descripcion, setDescripcion] = useState('');
     const [activoEnInventario, setActivoEnInventario] = useState('');
     const [ubicacion, setUbicacion] = useState('');
+    const [numInventario, setNumInventario] = useState("");
+    const [numSerieEquipo, setNumSerieEquipo] = useState("");
     const [tipoDispositivo, setTipoDispositivo] = useState('');
     const [nomAplicada, setNomAplicada] = useState('');
     const [mantPreventivo, setMantPreventivo] = useState('');
@@ -679,7 +691,7 @@ const ModalFilterEquipment = ({ mostrarModalEquiposPorFiltro, setMostrarModalEqu
                 credentials: "include",
                 body: JSON.stringify(equipo)
             });
-            //if (!response.ok) throw new Error("Error al guardar equipo");
+
             if (!response.ok) {
                 const errorText = await response.text();
                 throw new Error(`Error al guardar equipo: ${errorText}`);
@@ -689,7 +701,7 @@ const ModalFilterEquipment = ({ mostrarModalEquiposPorFiltro, setMostrarModalEqu
             const equipoNormalizadoDesdeBD = normalizarEquipo(equipoGuardado.equipo);
 
             setEquiposIniciales(prev => [...prev, equipoNormalizadoDesdeBD]);
-            //setEquiposIniciales(prev => [...prev, equipoGuardado]);
+
             setMensajeConfirmacion("Equipo Agregado con Éxito");
 
             setTimeout(() => {
@@ -718,9 +730,12 @@ const ModalFilterEquipment = ({ mostrarModalEquiposPorFiltro, setMostrarModalEqu
             }]);
         }
 
-
-        //if (!option.result) return;
-
+        if (option.label === "No") {
+            setRespuestasNo([...respuestasNo, {
+                caracteristica: hiloActual.question,
+                respuesta: option.label
+            }]);
+        }
 
         if (option.result) {
             //const usuarioSesion = localStorage.getItem('user_session') || 'Anonimo';
@@ -746,11 +761,21 @@ const ModalFilterEquipment = ({ mostrarModalEquiposPorFiltro, setMostrarModalEqu
                 tipoDispositivo,
                 activoEnInventario: activoEnInventario,
                 ubicacion: ubicacion || 'sin ubicacion en el inventario',
+                numInventario: numInventario || 'sin numero de inventario',
+                numSerieEquipo: numSerieEquipo || 'sin numero de serie',
                 imagen: imagenUrl,
-                respuestasSi: [...respuestasSi, {
-                    caracteristica: hiloActual.question,
-                    respuesta: option.label === "Si"
-                }].filter(r => r.respuesta === "Si"),
+                respuestasSi: [
+                    ...respuestasSi,
+                    ...(option.label === "Si"
+                        ? [{ caracteristica: hiloActual.question, respuesta: "Si" }]
+                        : [])
+                ],
+                respuestasNo: [
+                    ...respuestasNo,
+                    ...(option.label === "No"
+                        ? [{ caracteristica: hiloActual.question, respuesta: "No" }]
+                        : [])
+                ],
                 nivelRiesgo: option.result,
                 nomAplicada: nomAplicada || 'No especificada',
                 mantPreventivo: mantPreventivo ? mantPreventivo.split('\n').map(p => p.trim()) : ['Sin mantenimiento preventivo definido'],
@@ -760,6 +785,11 @@ const ModalFilterEquipment = ({ mostrarModalEquiposPorFiltro, setMostrarModalEqu
                 fechaAgregado: fechaActual
             };
 
+
+            if (!equipoModal) {
+                console.error('equipoModal es undefined');
+                return;
+            }
 
             const equipoNormalizado = normalizarEquipo(equipoModal);
             console.log("Equipo a guardar:", equipoNormalizado);
@@ -788,6 +818,8 @@ const ModalFilterEquipment = ({ mostrarModalEquiposPorFiltro, setMostrarModalEqu
         setResultado(null);
         setActivoEnInventario('');
         setUbicacion('');
+        setNumInventario('');
+        setNumSerieEquipo('');
         setImagenUrl('');
         setRespuestasSi([]);
         setDescripcion('');
@@ -810,12 +842,29 @@ const ModalFilterEquipment = ({ mostrarModalEquiposPorFiltro, setMostrarModalEqu
         if (activoEnInventario === 'si') {
             return (
                 <>
-                    <TagsContainer><MapPinned size={20} color={IconColor.text} style={{ margin: "10px 0px" }} />Ubicacion: </TagsContainer>
+                    <TagsContainer><MapPinned size={20} color={IconColor.text} style={{ margin: "10px 10px" }} />Ubicacion: </TagsContainer>
                     <FormField
                         name="ubicacion"
                         placeholder="define su ubicacion"
                         value={ubicacion}
                         onChange={(e) => setUbicacion(e.target.value)}
+                        required
+                    />
+                    <TagsContainer><FileDigit size={20} color={IconColor.text} style={{ margin: "10px 10px" }} />N° de inventario: </TagsContainer>
+                    <FormField
+                        name="numInventario"
+                        placeholder="define su numero de inventario"
+                        value={numInventario}
+                        onChange={(e) => setNumInventario(e.target.value)}
+                        required
+                    />
+
+                    <TagsContainer><FileDigit size={20} color={IconColor.text} style={{ margin: "10px 10px" }} />N° de Serie del Equipo: </TagsContainer>
+                    <FormField
+                        name="numSerieEquipo"
+                        placeholder="define su numero de serie"
+                        value={numSerieEquipo}
+                        onChange={(e) => setNumSerieEquipo(e.target.value)}
                         required
                     />
                 </>

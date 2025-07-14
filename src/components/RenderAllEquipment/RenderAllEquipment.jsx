@@ -1,4 +1,4 @@
-import { FileText, AlertCircle, ClipboardList, Wrench, HardHat, Drill } from 'lucide-react';
+import { FileText, AlertCircle, ClipboardList, Wrench, HardHat, Drill, CloudUploadIcon, MapPinned, FileDigit} from 'lucide-react';
 import {
     CardEquipos, GridEquipos,
     ContainerMsgNotFound, CardEquiposImgContainer,
@@ -73,11 +73,17 @@ const RenderAllEquipment = ({ busqueda, equiposAMostrar = [], equiposIniciales, 
                                         <dt><FileText size={18} color={IconColor.text} />Tipo de Dispositivo:</dt>
                                         <dd>{equipo.tipoDispositivo}</dd>
 
-                                        <dt><FileText size={18} color={IconColor.text}/>Activo en el inventario:</dt>
+                                        <dt><CloudUploadIcon size={18} color={IconColor.text}/>Activo en el inventario:</dt>
                                         <dd>{equipo.activoEnInventario}</dd>
 
-                                        <dt><FileText size={18} color={IconColor.text} />Ubicacion:</dt>
+                                        <dt><MapPinned size={18} color={IconColor.text} />Ubicacion:</dt>
                                         <dd>{equipo.ubicacion}</dd>
+
+                                        <dt><FileDigit size={18} color={IconColor.text} />N° de Inventario:</dt>
+                                        <dd>{equipo.numInventario}</dd>
+
+                                        <dt><FileDigit size={18} color={IconColor.text} />N° de Serie del Equipo:</dt>
+                                        <dd>{equipo.numSerieEquipo}</dd>
 
                                         <dt><AlertCircle size={18} color={IconColor.risk} />Nivel de Riesgo:</dt>
                                         <dd>{equipo.nivelRiesgo}</dd>
