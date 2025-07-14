@@ -28,6 +28,7 @@ const IconColor = {
 
 
 function normalizarEquipo(equipoModal) {
+    
     const caracteristicasSi = equipoModal.respuestasSi?.map(r => `${r.caracteristica} → Si`) || [];
     /*const caracteristicasNo = equipoModal.respuestasNo?.map(r => `${r.caracteristica} → No`) || [];
     const todasCaracteristicas = [
@@ -48,7 +49,7 @@ function normalizarEquipo(equipoModal) {
         numSerieEquipo: equipoModal.numSerieEquipo || "sin numero de serie",
         nivelRiesgo: equipoModal.nivelRiesgo || 'No definido',
         nomAplicada: equipoModal.nomAplicada || '',
-        caracteristicas: caracteristicasSi.length >= 0 ? caracteristicasSi.map(r => r.trim()).join('\n') : ['Sin características definidas'],  //equipoModal.caracteristicas || (equipoModal.respuestasSi?.length > 0 ? equipoModal.respuestasSi?.map(r => `${r.caracteristica} → Si`) : ['Sin características definidas']),
+        caracteristicas: equipoModal.respuestasSi?.length > 0 ? equipoModal.respuestasSi?.map(r => `${r.caracteristica} → Si`) : ['Sin características definidas'], //caracteristicasSi.length >= 0 ? caracteristicasSi.map(r => r.trim()).join('\n') : ['Sin características definidas'],  //equipoModal.caracteristicas || (equipoModal.respuestasSi?.length > 0 ? equipoModal.respuestasSi?.map(r => `${r.caracteristica} → Si`) : ['Sin características definidas']),
         mantPreventivo: equipoModal.mantPreventivo || [],
         mantCorrectivo: equipoModal.mantCorrectivo || [],
         //editadoPor: equipoModal.editadoPor || '',
