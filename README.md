@@ -1,5 +1,14 @@
 # Getting Started with Create React App
 
+<h3>Interfaz Biomedica</h3>
+      <ul>
+        <li>Biomedical interface, with registration and login, it presents a catalog of biomedical equipment, which are displayed by categories.</li>
+        <li>Biomedical equipment records can be edited and deleted.</li>
+        <li>Implementation of biomedical equipment registration through decision-making</li>
+        <li>CRUD operations management.</li>
+        <li>Use of React, Jsx, Html, Styled-components.</li>
+      </ul>
+
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
 
 ## Available Scripts
