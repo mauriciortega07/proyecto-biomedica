@@ -24,7 +24,7 @@ const useEquiposBiomedicos= () => {
     useEffect(() => {
       const fetchEquipos = async () => {
         try {
-          const response = await fetch("https://54.226.35.178/equipos_biomedicos");
+          const response = await fetch("http://54.226.35.178/equipos_biomedicos");
           
           if(!response.ok) throw new Error("Error al obtener los datos de los equipos registrados");
           

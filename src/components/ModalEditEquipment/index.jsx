@@ -88,7 +88,7 @@ const ModalEditEquipment = ({ equipoAEditar, modalEditEquipment, setModalEditEqu
 
         try {
             // Petición PUT al backend para actualizar el equipo en la base de datos
-            const response = await fetch(`https://54.226.35.178/equipos_biomedicos/${equipoAEditar.id}`, {
+            const response = await fetch(`http://54.226.35.178/equipos_biomedicos/${equipoAEditar.id}`, {
                 method: 'PUT',
                 headers: {
                     'Content-Type': 'application/json',
