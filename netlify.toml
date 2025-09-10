@@ -1,0 +1,10 @@
+[build]
+  command = "npm run build"
+  publish = "build"
+
+[[redirects]]
+  from = "/api/*"
+  to = "http://54.226.35.178:4000/:splat"
+  status = 200
+  force = true
+  headers = { "Access-Control-Allow-Origin" = "*" }

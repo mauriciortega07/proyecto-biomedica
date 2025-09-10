@@ -29,7 +29,7 @@ const useHandleInputChangeAndSubmit = () => {
         e.preventDefault();
 
         try {
-            const response = await fetch(`http://54.226.35.178:4000/register`, {
+            const response = await fetch(`/api/register`, {
                 method: "POST",
                 headers: { "Content-Type": "application/json" },
                 credentials: "include",
