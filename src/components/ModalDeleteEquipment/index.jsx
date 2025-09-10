@@ -15,7 +15,7 @@ const ModalDeleteEquipment = ({ equipoAEliminar, setModalDeleteEquipment, equipo
   
     const handleDeleteEquipment = async () => {
         try {
-            const response = await fetch(`https://backend-proyecto-biomedica-production.up.railway.app/equipos_biomedicos/${equipoAEliminar.id}`, {
+            const response = await fetch(`https://54.226.35.178/equipos_biomedicos/${equipoAEliminar.id}`, {
                 method: 'DELETE',
                 credentials: 'include'
             });

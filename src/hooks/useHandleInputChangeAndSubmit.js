@@ -27,7 +27,7 @@ const useHandleInputChangeAndSubmit = () => {
         e.preventDefault();
 
         try {
-            const response = await fetch("https://backend-proyecto-biomedica-production.up.railway.app/register", {
+            const response = await fetch("https://54.226.35.178/register", {
                 method: "POST",
                 headers: { "Content-Type": "application/json" },
                 credentials: "include",
@@ -56,7 +56,7 @@ const useHandleInputChangeAndSubmit = () => {
         e.preventDefault();
 
         try {
-            const response = await fetch("https://backend-proyecto-biomedica-production.up.railway.app/login", {
+            const response = await fetch("https://54.226.35.178/login", {
                 method: "POST",
                 headers: { "Content-Type": "application/json" },
                 credentials: "include",
