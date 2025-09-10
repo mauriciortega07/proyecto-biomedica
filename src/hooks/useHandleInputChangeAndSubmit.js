@@ -58,7 +58,7 @@ const useHandleInputChangeAndSubmit = () => {
         e.preventDefault();
 
         try {
-            const response = await fetch(`http://54.226.35.178:4000/login`, {
+            const response = await fetch(`/api/login`, {
                 method: "POST",
                 headers: { "Content-Type": "application/json" },
                 credentials: "include",
