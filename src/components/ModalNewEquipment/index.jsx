@@ -76,7 +76,7 @@ const ModalNewEquipment = ({ equiposIniciales, setEquiposIniciales, mostrarModal
         }
 
         try {
-            const response = await fetch(`${API_URL}/equipos_biomedicos`, {
+            const response = await fetch(`http://54.226.35.178:4000/equipos_biomedicos`, {
                 method: 'POST',
                 headers: {
                     'Content-type': 'application/json'
