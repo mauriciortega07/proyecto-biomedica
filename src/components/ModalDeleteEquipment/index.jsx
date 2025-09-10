@@ -8,6 +8,8 @@ import {
     ButtonsContainer
 } from './styles'
 
+const API_URL = "/api";
+
 const ModalDeleteEquipment = ({ equipoAEliminar, setModalDeleteEquipment, equiposIniciales, setEquiposIniciales }) => {
     const [confirmar, setConfirmar] = useState(false);
     const [error, setError] = useState(null);
@@ -15,7 +17,7 @@ const ModalDeleteEquipment = ({ equipoAEliminar, setModalDeleteEquipment, equipo
   
     const handleDeleteEquipment = async () => {
         try {
-            const response = await fetch(`http://54.226.35.178/equipos_biomedicos/${equipoAEliminar.id}`, {
+            const response = await fetch(`${API_URL}/equipos_biomedicos/${equipoAEliminar.id}`, {
                 method: 'DELETE',
                 credentials: 'include'
             });

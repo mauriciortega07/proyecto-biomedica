@@ -2,6 +2,8 @@ import React, { useState } from "react";
 import WelcomeModal from "../components/UserAcces/WelcomeModal";
 import { useNavigate } from "react-router-dom";
 
+const API_URL = "/api";
+
 const useHandleInputChangeAndSubmit = () => {
     const [form, setForm] = useState({
         name: "",
@@ -27,7 +29,7 @@ const useHandleInputChangeAndSubmit = () => {
         e.preventDefault();
 
         try {
-            const response = await fetch("http://54.226.35.178/register", {
+            const response = await fetch(`${API_URL}/register`, {
                 method: "POST",
                 headers: { "Content-Type": "application/json" },
                 credentials: "include",
@@ -56,7 +58,7 @@ const useHandleInputChangeAndSubmit = () => {
         e.preventDefault();
 
         try {
-            const response = await fetch("http://54.226.35.178/login", {
+            const response = await fetch(`${API_URL}/login`, {
                 method: "POST",
                 headers: { "Content-Type": "application/json" },
                 credentials: "include",

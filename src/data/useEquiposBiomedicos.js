@@ -1,5 +1,7 @@
 import { useState, useEffect } from "react";
 
+const API_URL = "/api";
+
 function limpiarEquipo(equipo) {
   const limpiarCampo = (campo) => {
     if(Array.isArray(campo)) return campo;
@@ -24,7 +26,7 @@ const useEquiposBiomedicos= () => {
     useEffect(() => {
       const fetchEquipos = async () => {
         try {
-          const response = await fetch("http://54.226.35.178/equipos_biomedicos");
+          const response = await fetch(`${API_URL}/equipos_biomedicos`);
           
           if(!response.ok) throw new Error("Error al obtener los datos de los equipos registrados");
           

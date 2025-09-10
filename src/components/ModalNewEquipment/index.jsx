@@ -15,6 +15,8 @@ const IconColor = {
     mapPinned: '#17A2B8'
 }
 
+const API_URL = "/api";
+
 const ModalNewEquipment = ({ equiposIniciales, setEquiposIniciales, mostrarModal, setMostrarModal }) => {
     console.log(equiposIniciales)
     const [nuevoEquipo, setNuevoEquipo] = useState({
@@ -74,7 +76,7 @@ const ModalNewEquipment = ({ equiposIniciales, setEquiposIniciales, mostrarModal
         }
 
         try {
-            const response = await fetch("http://54.226.35.178/equipos_biomedicos", {
+            const response = await fetch(`${API_URL}/equipos_biomedicos`, {
                 method: 'POST',
                 headers: {
                     'Content-type': 'application/json'

@@ -14,6 +14,8 @@ const IconColor = {
     imagePlus: '#EA40D0'
 }
 
+const API_URL = "/api";
+
 const ModalEditEquipment = ({ equipoAEditar, modalEditEquipment, setModalEditEquipment, setEquiposIniciales }) => {
 
     const [equipoEditado, setEquipoEditado] = useState({
@@ -88,7 +90,7 @@ const ModalEditEquipment = ({ equipoAEditar, modalEditEquipment, setModalEditEqu
 
         try {
             // Petición PUT al backend para actualizar el equipo en la base de datos
-            const response = await fetch(`http://54.226.35.178/equipos_biomedicos/${equipoAEditar.id}`, {
+            const response = await fetch(`${API_URL}/equipos_biomedicos/${equipoAEditar.id}`, {
                 method: 'PUT',
                 headers: {
                     'Content-Type': 'application/json',
