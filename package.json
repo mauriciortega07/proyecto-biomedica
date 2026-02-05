@@ -14,7 +14,8 @@
     "react-scripts": "5.0.1",
     "styled-components": "^6.1.17",
     "styled-reset": "^4.5.2",
-    "web-vitals": "^2.1.4"
+    "web-vitals": "^2.1.4",
+    "xlsx": "^0.18.5"
   },
   "resolutions": {
     "styled-components": "6.1.17",
@@ -44,5 +45,8 @@
       "last 1 firefox version",
       "last 1 safari version"
     ]
+  },
+  "devDependencies": {
+    "http-proxy-middleware": "^3.0.5"
   }
 }

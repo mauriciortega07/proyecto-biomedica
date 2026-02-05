@@ -9,11 +9,13 @@ import { ContainerEquipos, MainContainer, TitleCatalogo, SearchContainer, Button
 import RenderAllEquipment from "../RenderAllEquipment/RenderAllEquipment";
 import ModalFilterEquipment from "../ModalFilterEquipment";
 import useEquiposBiomedicos from "../../data/useEquiposBiomedicos"
+import ModalChargeDB from "../ModalChargeDB";
 
 const MainContent = ({ equiposBiomedicos, setEquiposBiomedicos }) => {
     //const [equiposIniciales, setEquiposIniciales] = useState(equiposBiomedicos);
     const [mostrarModal, setMostrarModal] = useState(false);
     const [mostrarModalEquiposPorFiltro, setMostrarModalEquiposPorFiltro] = useState(false);
+    const [mostrarModalChargeDB, setMostrarModalChargeDB] = useState(false);
     const [categoriaSeleccionada, setCategoriaSeleccionada] = useState("Todos");
 
 
@@ -76,6 +78,7 @@ const MainContent = ({ equiposBiomedicos, setEquiposBiomedicos }) => {
                     <SearchBox busqueda={busqueda} handleInputChange={handleInputChange} />
                     <ButtonRegister onClick={() => setMostrarModal(true)} >+ Agregar Equipo</ButtonRegister>
                     <ButtonRegister onClick={() => setMostrarModalEquiposPorFiltro(true)} >Agregar Equipo Mediante Toma de Decision</ButtonRegister>
+                    <ButtonRegister onClick={() => setMostrarModalChargeDB(true)} >Cargar Equipos desde Base de Datos</ButtonRegister>
                 </SearchContainer>
 
                 {/*GRID DE EQUIPOS */}
@@ -86,6 +89,8 @@ const MainContent = ({ equiposBiomedicos, setEquiposBiomedicos }) => {
 
                 {/*MODAL PARA AGREGAR EQUIPOS MEDIANTE TOMA DE DECISIONES*/}
                 <ModalFilterEquipment mostrarModalEquiposPorFiltro={mostrarModalEquiposPorFiltro} setMostrarModalEquiposPorFiltro={setMostrarModalEquiposPorFiltro} setEquiposIniciales={setEquiposBiomedicos} />
+
+                <ModalChargeDB mostrarModalChargeDB={mostrarModalChargeDB} setMostrarModalChargeDB={setMostrarModalChargeDB} setEquiposIniciales={setEquiposBiomedicos}></ModalChargeDB>
             </ContainerEquipos>
         </MainContainer>
 

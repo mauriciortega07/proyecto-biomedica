@@ -16,7 +16,12 @@ const IconColor = {
 
 const API_URL = "/api";
 
-const ModalEditEquipment = ({ equipoAEditar, modalEditEquipment, setModalEditEquipment, setEquiposIniciales }) => {
+const ModalEditEquipment = ({ equipoAEditar,
+    modalEditEquipment,
+    setModalEditEquipment,
+    setEquiposIniciales,
+    mode = "DB",
+    onSavePreview }) => {
 
     const [equipoEditado, setEquipoEditado] = useState({
         nombre: "",
@@ -87,6 +92,22 @@ const ModalEditEquipment = ({ equipoAEditar, modalEditEquipment, setModalEditEqu
             editadoPor: nombreUsuarioEnSesion,
             fechaModificacion: fechaModificacion
         };
+
+
+        // ✅ MODO PREVIEW: NO BD. Solo regresa cambios al modal padre.
+        if (mode === "PREVIEW") {
+            if (typeof onSavePreview === "function") {
+                onSavePreview(updateEquipo);
+            }
+            setMensajeConfirmacion("Cambios aplicados en la previsualización");
+
+            setTimeout(() => {
+                setModalEditEquipment(false);
+                setMensajeConfirmacion("");
+            }, 3000);
+
+            return;
+        }
 
         try {
             // Petición PUT al backend para actualizar el equipo en la base de datos
