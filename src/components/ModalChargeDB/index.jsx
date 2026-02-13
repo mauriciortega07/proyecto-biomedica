@@ -20,7 +20,6 @@ import {
     ButtonRestart,
     ContainerGral,
 
-    // ✅ IMPORTA ESTOS SI EXISTEN EN TU styles (son los del ModalFilterEquipment)
     FormField,
     TextArea,
     ButtonStartEquipment,
@@ -46,7 +45,6 @@ const IconColor = {
     mapPinned: "#17A2B8"
 };
 
-// ✅ Columnas obligatorias del Excel (nivelRiesgo NO se pide)
 const REQUIRED_COLUMNS = [
     "nombre",
     "descripcion",
@@ -62,7 +60,6 @@ const REQUIRED_COLUMNS = [
     "img"
 ];
 
-// ✅ Diccionario de nombres bonitos para headers
 const PRETTY_HEADERS = {
     nombre: "Nombre",
     descripcion: "Descripción",

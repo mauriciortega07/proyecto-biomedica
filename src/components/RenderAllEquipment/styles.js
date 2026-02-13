@@ -112,6 +112,28 @@ const ButtonDelete = styled.button`
 
 `
 
+const ButtonMantenimiento = styled.button`
+    background-color:rgb(235, 59, 59);
+    color: white;
+    padding: 10px 20px;
+    font-size: 16px;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    font-weight: 500;
+    transition: background-color 0.3s, box-shadow 0.3s;
+
+     &:hover {
+    background-color:rgb(182, 0, 0);
+    box-shadow: 0 4px 10px rgb(177, 0, 0);
+  }
+
+  &:active {
+    transform: scale(0.98);
+  }
+
+`
+
 export {
     GridEquipos,
     CardEquipos,
@@ -119,5 +141,6 @@ export {
     CardEquiposImgContainer,
     SectionInfoEquipos,
     ButtonEdit,
-    ButtonDelete
+    ButtonDelete,
+    ButtonMantenimiento
 }

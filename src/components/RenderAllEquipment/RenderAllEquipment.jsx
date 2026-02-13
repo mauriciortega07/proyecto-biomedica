@@ -1,13 +1,15 @@
-import { FileText, AlertCircle, ClipboardList, Wrench, HardHat, Drill, CloudUploadIcon, MapPinned, FileDigit} from 'lucide-react';
+import { FileText, AlertCircle, ClipboardList, Wrench, HardHat, Drill, CloudUploadIcon, MapPinned, FileDigit, } from 'lucide-react';
 import {
     CardEquipos, GridEquipos,
     ContainerMsgNotFound, CardEquiposImgContainer,
-    SectionInfoEquipos, ButtonEdit, ButtonDelete
+    SectionInfoEquipos, ButtonEdit, ButtonDelete,
+    ButtonMantenimiento
 
 } from './styles.js';
 import ModalEditEquipment from '../ModalEditEquipment/index.jsx';
 import { useState } from 'react';
 import ModalDeleteEquipment from '../ModalDeleteEquipment/index.jsx';
+import ModalMantEquipment from '../ModalMantEquipo/index.jsx';
 
 const IconColor = {
     user: '#007BFF',       // azul
@@ -30,6 +32,11 @@ const RenderAllEquipment = ({ busqueda, equiposAMostrar = [], equiposIniciales, 
     //ESTADOS DEL MODAL ELIMINAR EQUIPO
     const [modalDeleteEquipment, setModalDeleteEquipment] = useState(false);
     const [equipoAEliminar, setEquipoAEliminar] = useState(null);
+
+        //ESTADOS DEL MODAL MANTENIMIENTOS DEL EQUIPO
+    const [modalMantEquipment, setModalMantEquipment] = useState(false);
+    const [equipoMant, setEquipoMant] = useState(null);
+
 
     //FUNCION QUE FILTRA LOS EQUIPOS POR NOMBRE O NIVEL DE RIESGO
 
@@ -156,10 +163,16 @@ const RenderAllEquipment = ({ busqueda, equiposAMostrar = [], equiposIniciales, 
                                                     setModalEditEquipment(true);
                                                     setEquipoAEditar(equipo);
                                                 }}>Editar Equipo</ButtonEdit>
+                                                
                                                 <ButtonDelete onClick={() => {
                                                     setModalDeleteEquipment(true)
                                                     setEquipoAEliminar(equipo)
                                                 }}>Eliminar Equipo</ButtonDelete>
+
+                                                <ButtonMantenimiento onClick={() => {
+                                                    setModalMantEquipment(true)
+                                                    setEquipoMant(equipo)
+                                                }}>Mantenimientos</ButtonMantenimiento>
                                             </div>
                                         </section>
                                     </SectionInfoEquipos>
@@ -191,6 +204,19 @@ const RenderAllEquipment = ({ busqueda, equiposAMostrar = [], equiposIniciales, 
                     <ModalDeleteEquipment
                         equipoAEliminar={equipoAEliminar}
                         setModalDeleteEquipment={setModalDeleteEquipment}
+                        equiposIniciales={equiposIniciales}
+                        setEquiposIniciales={setEquiposIniciales}
+                    />
+                )
+            }
+
+
+            {/*MODAL MANTENIMIENTO EQUIPO (SE ABRE CON EL BOTON DE ELIMINAR) */}
+            {
+                modalMantEquipment && equipoMant && (
+                    <ModalMantEquipment
+                        equipoMant={equipoMant}
+                        setModalMantEquipment={setModalMantEquipment}
                         equiposIniciales={equiposIniciales}
                         setEquiposIniciales={setEquiposIniciales}
                     />
