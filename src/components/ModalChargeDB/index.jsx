@@ -76,7 +76,7 @@ const PRETTY_HEADERS = {
     img: "Imagen URL"
 };
 
-// Normaliza headers: quita acentos, espacios, etc.
+// Normaliza headers: quita acentos, espacios
 const normalizeKey = (key) => {
     if (!key) return "";
     return key
@@ -129,13 +129,11 @@ const ModalChargeDB = ({ mostrarModalChargeDB, setMostrarModalChargeDB, setEquip
     const [indexAEditar, setIndexAEditar] = useState(null);
 
 
-    // ✅ Vistas del modal
     // UPLOAD = Excel + Preview
     // DECISION = Vista de evaluación (toma de decisiones)
     const [viewMode, setViewMode] = useState("UPLOAD");
     const [selectedIndex, setSelectedIndex] = useState(null);
 
-    // ✅ Estados reutilizados del ModalFilterEquipment pero adaptados
     const [equipo, setEquipo] = useState("");
     const [equipoIngresado, setEquipoIngresado] = useState(false);
     const [hiloActual, setHiloActual] = useState(null);
@@ -145,13 +143,9 @@ const ModalChargeDB = ({ mostrarModalChargeDB, setMostrarModalChargeDB, setEquip
     const [respuestasNo, setRespuestasNo] = useState([]);
     const [tipoDispositivo, setTipoDispositivo] = useState("");
 
-    // ✅ estado para guardado masivo
     const [savingAll, setSavingAll] = useState(false);
 
-    // ============================================================
-    // ✅ AQUI PEGAS TUS ARBOLES TAL CUAL (resumí el bloque porque es enorme)
-    // 👉 COPIA/PEGA EXACTAMENTE los arboles que ya tienes en ModalFilterEquipment
-    // ============================================================
+    // ARBOLES INICIO
 
     const arbolNoInvasivo = {
         question: "¿El dispositivo esta destinado a la conduccion o almacenamiento para perfusion,administarcion o introduccion en el cuerpo?",
@@ -717,9 +711,8 @@ const ModalChargeDB = ({ mostrarModalChargeDB, setMostrarModalChargeDB, setEquip
     };
 
 
-    // ============================================================
-    // ✅ FIN ARBOLES
-    // ============================================================
+    //  FIN ARBOLES
+    
 
     if (!mostrarModalChargeDB) return null;
 
@@ -769,8 +762,7 @@ const ModalChargeDB = ({ mostrarModalChargeDB, setMostrarModalChargeDB, setEquip
 
         setIndexAEditar(index);
 
-        // OJO: ModalEditEquipment espera arrays o strings con \n.
-        // Tu preview trae strings (excel). Lo convertimos a la forma que el modal usa.
+        
         const toTextAreaValue = (v) => {
             if (Array.isArray(v)) return v.join("\n");
             return v?.toString() || "";
@@ -787,7 +779,6 @@ const ModalChargeDB = ({ mostrarModalChargeDB, setMostrarModalChargeDB, setEquip
     };
 
     const applyEditedRow = (equipoEditado) => {
-        // equipoEditado ya viene con arrays en caracteristicas/mants (por el updateEquipo)
         setRowsPreview((prev) => {
             const copy = [...prev];
             if (indexAEditar === null || !copy[indexAEditar]) return prev;
@@ -796,7 +787,6 @@ const ModalChargeDB = ({ mostrarModalChargeDB, setMostrarModalChargeDB, setEquip
                 ...copy[indexAEditar],
                 ...equipoEditado,
 
-                // ✅ Mantén tus campos internos del preview
                 _status: copy[indexAEditar]._status || "",
                 _error: copy[indexAEditar]._error || "",
                 _savedId: copy[indexAEditar]._savedId || null
@@ -805,9 +795,7 @@ const ModalChargeDB = ({ mostrarModalChargeDB, setMostrarModalChargeDB, setEquip
             return copy;
         });
 
-        // si el usuario editó un guardado que estaba en ERROR o GUARDADO y quieres forzar re-guardar:
-        // - si ya estaba guardado, NO lo cambies
-        // - si estaba en ERROR, podrías limpiar el error:
+        
         setRowStatus(indexAEditar, { _error: "" });
 
         setModalEditEquipment(false);
@@ -854,7 +842,6 @@ const ModalChargeDB = ({ mostrarModalChargeDB, setMostrarModalChargeDB, setEquip
                 ...row,
                 nivelRiesgo: row.nivelRiesgo || "",
 
-                // ✅ estados internos para guardado
                 _status: "PENDIENTE", // PENDIENTE | GUARDANDO | GUARDADO | ERROR
                 _error: "",
                 _savedId: null
@@ -867,7 +854,6 @@ const ModalChargeDB = ({ mostrarModalChargeDB, setMostrarModalChargeDB, setEquip
         }
     };
 
-    // ✅ Botón Evaluar de una fila
     const handleEvaluateRow = (index) => {
         resetDecisionState();
 
@@ -883,7 +869,6 @@ const ModalChargeDB = ({ mostrarModalChargeDB, setMostrarModalChargeDB, setEquip
         setViewMode("DECISION");
     };
 
-    // ✅ Comienza árbol según tipoDispositivo (MISMO switch que tu ModalFilterEquipment)
     const handleEmpezarArbol = () => {
         if (!equipo.trim() || !tipoDispositivo) {
             alert("Por favor, selecciona el tipo de dispositivo.");
@@ -922,7 +907,6 @@ const ModalChargeDB = ({ mostrarModalChargeDB, setMostrarModalChargeDB, setEquip
         setEquipoIngresado(true);
     };
 
-    // ✅ Cuando terminas la evaluación -> asignar nivelRiesgo a la fila del Excel
     const handleOpcionClick = (option) => {
         if (option.label === "Si") {
             setRespuestasSi((prev) => [
@@ -941,7 +925,6 @@ const ModalChargeDB = ({ mostrarModalChargeDB, setMostrarModalChargeDB, setEquip
         if (option.result) {
             setResultado(option.result);
 
-            // ✅ Actualiza el nivelRiesgo de la fila evaluada
             setRowsPreview((prev) => {
                 const copy = [...prev];
                 if (selectedIndex !== null && copy[selectedIndex]) {
@@ -954,12 +937,11 @@ const ModalChargeDB = ({ mostrarModalChargeDB, setMostrarModalChargeDB, setEquip
                 return copy;
             });
 
-            // ✅ Regresa al preview
             setTimeout(() => {
                 setViewMode("UPLOAD");
                 setSelectedIndex(null);
                 resetDecisionState();
-            }, 200);
+            }, 2000);
         } else if (option.next) {
             setHistorial((prev) => [...prev, hiloActual]);
             setHiloActual(option.next);
@@ -995,11 +977,7 @@ const ModalChargeDB = ({ mostrarModalChargeDB, setMostrarModalChargeDB, setEquip
         };
     };
 
-    // ============================================================
-    // ✅ GUARDADO A BD (INDIVIDUAL Y MASIVO)
-    // - nivelRiesgo NO es obligatorio: si está vacío -> "Pendiente"
-    // - agrega usuario_id, agregadoPor, fechaAgregado desde user_session
-    // ============================================================
+
 
     const getUserMeta = () => {
         const userSession = JSON.parse(localStorage.getItem("user_session"));
@@ -1028,8 +1006,8 @@ const ModalChargeDB = ({ mostrarModalChargeDB, setMostrarModalChargeDB, setEquip
 
 
         const toBackendValue = (v) => {
-            if (Array.isArray(v)) return v;         // backend ya hace JSON.stringify
-            if (typeof v === "string") return v;    // si venía crudo del excel
+            if (Array.isArray(v)) return v;         
+            if (typeof v === "string") return v;    
             return "";
         };
 
@@ -1042,7 +1020,6 @@ const ModalChargeDB = ({ mostrarModalChargeDB, setMostrarModalChargeDB, setEquip
             numInventario: row.numInventario || "",
             numSerieEquipo: row.numSerieEquipo || "",
 
-            // ✅ NO obligatorio
             nivelRiesgo: row.nivelRiesgo && row.nivelRiesgo.toString().trim() !== ""
                 ? row.nivelRiesgo
                 : "Pendiente",
@@ -1053,7 +1030,6 @@ const ModalChargeDB = ({ mostrarModalChargeDB, setMostrarModalChargeDB, setEquip
             mantCorrectivo: toBackendValue(row.mantCorrectivo),
             img: row.img || "",
 
-            // ✅ backend adicional
             usuario_id: meta.usuario_id,
             agregadoPor: meta.agregadoPor,
             fechaAgregado: meta.fechaAgregado
@@ -1073,7 +1049,6 @@ const ModalChargeDB = ({ mostrarModalChargeDB, setMostrarModalChargeDB, setEquip
         const row = rowsPreview[index];
         if (!row) return;
 
-        // si ya guardado, no reintentar
         if (row._status === "GUARDADO") return;
 
         try {
@@ -1102,7 +1077,6 @@ const ModalChargeDB = ({ mostrarModalChargeDB, setMostrarModalChargeDB, setEquip
                 _savedId: savedId
             });
 
-            // ✅ ACTUALIZA LA VISTA GLOBAL (Catálogo) SIN RECARGAR
             const equipoNormalizado = normalizarEquipoDesdeBD(data?.equipo);
 
             if (equipoNormalizado && setEquiposIniciales) {
@@ -1139,9 +1113,7 @@ const ModalChargeDB = ({ mostrarModalChargeDB, setMostrarModalChargeDB, setEquip
         }
     };
 
-    // ==========================
-    // ✅ VISTA 1: UPLOAD + PREVIEW
-    // ==========================
+
     const renderUploadView = () => (
         <>
             <TitleModal>Cargar equipos desde Excel</TitleModal>
@@ -1187,7 +1159,6 @@ const ModalChargeDB = ({ mostrarModalChargeDB, setMostrarModalChargeDB, setEquip
                             Previsualización ({rowsPreview.length} equipos)
                         </h3>
 
-                        {/* ✅ Guardar todos */}
                         <button
                             onClick={saveAllToDB}
                             disabled={savingAll}
@@ -1219,10 +1190,8 @@ const ModalChargeDB = ({ mostrarModalChargeDB, setMostrarModalChargeDB, setEquip
                                 <tr style={{ background: "#f5f5f5" }}>
                                     <th style={{ padding: "8px", textAlign: "left" }}>#</th>
 
-                                    {/* ✅ Acciones */}
                                     <th style={{ padding: "8px", textAlign: "left" }}>Acciones</th>
 
-                                    {/* ✅ Estado */}
                                     <th style={{ padding: "8px", textAlign: "left" }}>Estado</th>
 
                                     {previewColumns.map((col) => (
@@ -1249,7 +1218,6 @@ const ModalChargeDB = ({ mostrarModalChargeDB, setMostrarModalChargeDB, setEquip
                                         <tr key={row._rowId} style={{ borderTop: "1px solid #eee" }}>
                                             <td style={{ padding: "8px" }}>{row._rowId}</td>
 
-                                            {/* ✅ Acciones: Evaluar + Guardar */}
                                             <td style={{ padding: "8px", display: "flex", gap: "8px" }}>
                                                 <button
                                                     onClick={() => handleEvaluateRow(index)}
@@ -1301,7 +1269,6 @@ const ModalChargeDB = ({ mostrarModalChargeDB, setMostrarModalChargeDB, setEquip
                                                 </button>
                                             </td>
 
-                                            {/* ✅ Estado */}
                                             <td style={{ padding: "8px", whiteSpace: "nowrap" }}>
                                                 <span
                                                     style={{
@@ -1332,7 +1299,6 @@ const ModalChargeDB = ({ mostrarModalChargeDB, setMostrarModalChargeDB, setEquip
                                                 ) : null}
                                             </td>
 
-                                            {/* ✅ Columnas */}
                                             {previewColumns.map((col) => {
                                                 let value = row[col];
 
@@ -1383,9 +1349,7 @@ const ModalChargeDB = ({ mostrarModalChargeDB, setMostrarModalChargeDB, setEquip
         </>
     );
 
-    // ==========================
-    // ✅ VISTA 2: DECISION TREE (REUTILIZANDO tu UI)
-    // ==========================
+
     const renderDecisionView = () => (
         <>
             {!equipoIngresado ? (
@@ -1397,7 +1361,6 @@ const ModalChargeDB = ({ mostrarModalChargeDB, setMostrarModalChargeDB, setEquip
                         Equipo a evaluar:
                     </TagsContainer>
 
-                    {/* ✅ Nombre (solo lectura) */}
                     <FormField value={equipo} readOnly />
 
                     <TagsContainer>
