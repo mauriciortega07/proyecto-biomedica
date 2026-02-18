@@ -211,7 +211,7 @@ const RenderAllEquipment = ({ busqueda, equiposAMostrar = [], equiposIniciales, 
             }
 
 
-            {/*MODAL MANTENIMIENTO EQUIPO (SE ABRE CON EL BOTON DE ELIMINAR) */}
+            {/*MODAL MANTENIMIENTO EQUIPO ) */}
             {
                 modalMantEquipment && equipoMant && (
                     <ModalMantEquipment

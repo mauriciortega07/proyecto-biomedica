@@ -75,12 +75,12 @@ const getUserMetaFromSession = () => {
   }
 };
 
+// (queda por compatibilidad, pero estás usando /api por proxy/redirect)
 const API_BASE_URL = (() => {
   try {
     if (typeof import.meta !== "undefined" && import.meta.env?.VITE_API_URL) return import.meta.env.VITE_API_URL;
   } catch {}
   if (typeof process !== "undefined" && process.env?.REACT_APP_API_URL) return process.env.REACT_APP_API_URL;
-
   return "http://localhost:4000";
 })();
 
@@ -95,7 +95,7 @@ const toISOish = (v) => {
 };
 
 const mapDbToUi = (r) => ({
-  id: r.id, 
+  id: r.id,
   client_uid: r.client_uid ?? null,
   equipoId: r.equipo_id,
   tipo: r.tipo,
@@ -109,11 +109,7 @@ const mapDbToUi = (r) => ({
   updatedAt: toISOish(r.updated_at),
 });
 
-const ModalMantEquipment = ({
-  equipoMant,
-  setModalMantEquipment,
-  setEquiposIniciales,
-}) => {
+const ModalMantEquipment = ({ equipoMant, setModalMantEquipment, setEquiposIniciales }) => {
   const [tab, setTab] = useState("PROGRAMAR");
   const [fecha, setFecha] = useState("");
   const [hora, setHora] = useState("");
@@ -207,7 +203,6 @@ const ModalMantEquipment = ({
     setEditingId(null);
     setApiError("");
     setMantenimientos([]);
-
     cargarMantenimientos();
   }, [equipoMant?.id]);
 
@@ -224,7 +219,6 @@ const ModalMantEquipment = ({
       fechaProgramada: fechaISO,
       realizadoPor: quien,
       usuario_id,
-    
     };
 
     if (preventivo.trim()) {
@@ -333,14 +327,11 @@ const ModalMantEquipment = ({
     setApiError("");
     setLoading(true);
     try {
-      const res = await fetch(
-        `/api/equipos_biomedicos/${equipoMant.id}/mantenimientos/finalizar_todos`,
-        {
-          method: "PATCH",
-          headers: { "Content-Type": "application/json" },
-          credentials: "include",
-        }
-      );
+      const res = await fetch(`/api/equipos_biomedicos/${equipoMant.id}/mantenimientos/finalizar_todos`, {
+        method: "PATCH",
+        headers: { "Content-Type": "application/json" },
+        credentials: "include",
+      });
 
       if (!res.ok) {
         const txt = await res.text();
@@ -355,6 +346,72 @@ const ModalMantEquipment = ({
       setLoading(false);
     }
   };
+
+  // ===========================
+  // BORRAR MANTENIMIENTOS
+  //
+  // ===========================
+  const eliminarMantenimiento = async (id) => {
+    if (!id) return;
+
+    const ok = window.confirm("¿Seguro que quieres borrar este mantenimiento? Esta acción no se puede deshacer.");
+    if (!ok) return;
+
+    setApiError("");
+    setLoading(true);
+    try {
+      const res = await fetch(`/api/mantenimientos/${id}`, {
+        method: "DELETE",
+        headers: { "Content-Type": "application/json" },
+        credentials: "include",
+      });
+
+      if (!res.ok) {
+        const txt = await res.text();
+        throw new Error(txt || `Error HTTP ${res.status}`);
+      }
+
+      if (editingId === id) cancelEdit();
+      await cargarMantenimientos();
+    } catch (e) {
+      setApiError(e?.message || "Failed to fetch");
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const borrarTodosPorEstado = async (estado) => {
+    if (!equipoMant?.id) return;
+
+    const label = estado === ESTADOS.PROGRAMADO ? "PROGRAMADOS" : "FINALIZADOS";
+    const ok = window.confirm(`¿Seguro que quieres borrar TODOS los mantenimientos ${label} de este equipo?`);
+    if (!ok) return;
+
+    setApiError("");
+    setLoading(true);
+    try {
+      const res = await fetch(`/api/equipos_biomedicos/${equipoMant.id}/mantenimientos?estado=${estado}`, {
+        method: "DELETE",
+        headers: { "Content-Type": "application/json" },
+        credentials: "include",
+      });
+
+      if (!res.ok) {
+        const txt = await res.text();
+        throw new Error(txt || `Error HTTP ${res.status}`);
+      }
+
+      cancelEdit();
+      await cargarMantenimientos();
+    } catch (e) {
+      setApiError(e?.message || "Failed to fetch");
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const borrarTodosProgramados = () => borrarTodosPorEstado(ESTADOS.PROGRAMADO);
+  const borrarTodosFinalizados = () => borrarTodosPorEstado(ESTADOS.FINALIZADO);
 
   const startEdit = (m) => {
     setEditError("");
@@ -426,6 +483,17 @@ const ModalMantEquipment = ({
 
   const programados = mantenimientos.filter((h) => (h.estado || ESTADOS.PROGRAMADO) === ESTADOS.PROGRAMADO);
   const finalizados = mantenimientos.filter((h) => h.estado === ESTADOS.FINALIZADO);
+
+  const dangerBtn = (disabled) => ({
+    padding: "10px 14px",
+    borderRadius: "12px",
+    border: "1px solid #b00020",
+    background: "#fff",
+    color: "#b00020",
+    cursor: disabled ? "not-allowed" : "pointer",
+    fontWeight: 900,
+    opacity: disabled ? 0.6 : 1,
+  });
 
   return (
     <ModalBackground onClick={handleClose}>
@@ -546,22 +614,35 @@ const ModalMantEquipment = ({
               <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", gap: 12 }}>
                 <SectionTitle>Programados</SectionTitle>
 
-                <button
-                  type="button"
-                  onClick={finalizarTodosProgramados}
-                  disabled={loading || programados.length === 0}
-                  style={{
-                    padding: "10px 14px",
-                    borderRadius: "12px",
-                    border: "1px solid #ddd",
-                    cursor: loading || programados.length === 0 ? "not-allowed" : "pointer",
-                    fontWeight: 800,
-                    opacity: loading || programados.length === 0 ? 0.6 : 1,
-                  }}
-                  title="Marca como FINALIZADO todos los mantenimientos programados"
-                >
-                  Finalizar todos
-                </button>
+                <div style={{ display: "flex", gap: 10, flexWrap: "wrap", justifyContent: "flex-end" }}>
+                  <button
+                    type="button"
+                    onClick={finalizarTodosProgramados}
+                    disabled={loading || programados.length === 0}
+                    style={{
+                      padding: "10px 14px",
+                      borderRadius: "12px",
+                      border: "1px solid #ddd",
+                      cursor: loading || programados.length === 0 ? "not-allowed" : "pointer",
+                      fontWeight: 800,
+                      opacity: loading || programados.length === 0 ? 0.6 : 1,
+                    }}
+                    title="Marca como FINALIZADO todos los mantenimientos programados"
+                  >
+                    Finalizar todos
+                  </button>
+
+                  {/*  borrar todos programados */}
+                  <button
+                    type="button"
+                    onClick={borrarTodosProgramados}
+                    disabled={loading || programados.length === 0}
+                    style={dangerBtn(loading || programados.length === 0)}
+                    title="Borra todos los mantenimientos PROGRAMADOS del equipo"
+                  >
+                    Borrar programados
+                  </button>
+                </div>
               </div>
 
               {loading ? (
@@ -666,16 +747,14 @@ const ModalMantEquipment = ({
                             }}
                           />
                           {editError ? (
-                            <div style={{ marginTop: 8, color: "#b00020", fontWeight: 800 }}>
-                              • {editError}
-                            </div>
+                            <div style={{ marginTop: 8, color: "#b00020", fontWeight: 800 }}>• {editError}</div>
                           ) : null}
                         </div>
                       ) : (
                         <div style={{ marginTop: 8, whiteSpace: "pre-wrap" }}>{h.descripcion}</div>
                       )}
 
-                      <div style={{ marginTop: 10, display: "flex", justifyContent: "flex-end", gap: 10 }}>
+                      <div style={{ marginTop: 10, display: "flex", justifyContent: "flex-end", gap: 10, flexWrap: "wrap" }}>
                         {isEditing ? (
                           <>
                             <button
@@ -747,6 +826,17 @@ const ModalMantEquipment = ({
                             >
                               Finalizar
                             </button>
+
+                            {/* ✅ NUEVO: borrar individual */}
+                            <button
+                              type="button"
+                              onClick={() => eliminarMantenimiento(h.id)}
+                              style={dangerBtn(loading)}
+                              title="Borrar este mantenimiento"
+                              disabled={loading}
+                            >
+                              Borrar
+                            </button>
                           </>
                         )}
                       </div>
@@ -755,7 +845,21 @@ const ModalMantEquipment = ({
                 })
               )}
 
-              <SectionTitle style={{ marginTop: 18 }}>Historial (finalizados)</SectionTitle>
+              <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", gap: 12, marginTop: 18 }}>
+                <SectionTitle>Historial (finalizados)</SectionTitle>
+
+                {/* borrar todos finalizados */}
+                <button
+                  type="button"
+                  onClick={borrarTodosFinalizados}
+                  disabled={loading || finalizados.length === 0}
+                  style={dangerBtn(loading || finalizados.length === 0)}
+                  title="Borra todos los mantenimientos FINALIZADOS del equipo"
+                >
+                  Borrar finalizados
+                </button>
+              </div>
+
               {loading ? (
                 <EmptyState>Cargando...</EmptyState>
               ) : finalizados.length === 0 ? (
@@ -784,6 +888,19 @@ const ModalMantEquipment = ({
                     ) : null}
 
                     <div style={{ marginTop: 8, whiteSpace: "pre-wrap" }}>{h.descripcion}</div>
+
+                    {/* borrar individual finalizado */}
+                    <div style={{ marginTop: 10, display: "flex", justifyContent: "flex-end" }}>
+                      <button
+                        type="button"
+                        onClick={() => eliminarMantenimiento(h.id)}
+                        style={dangerBtn(loading)}
+                        disabled={loading}
+                        title="Borrar este mantenimiento del historial"
+                      >
+                        Borrar
+                      </button>
+                    </div>
                   </HistoryItem>
                 ))
               )}
