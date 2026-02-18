@@ -109,6 +109,103 @@ const mapDbToUi = (r) => ({
   updatedAt: toISOish(r.updated_at),
 });
 
+const ConfirmDeleteModal = ({
+  open,
+  title,
+  message,
+  confirmText = "Eliminar",
+  cancelText = "Cancelar",
+  loading,
+  success,
+  error,
+  onCancel,
+  onConfirm,
+}) => {
+  if (!open) return null;
+
+  return (
+    <div
+      onClick={(e) => {
+        e.stopPropagation();
+        if (!loading) onCancel();
+      }}
+      style={{
+        position: "fixed",
+        inset: 0,
+        background: "rgba(0,0,0,0.55)",
+        display: "flex",
+        alignItems: "center",
+        justifyContent: "center",
+        zIndex: 9999,
+        padding: 12,
+      }}
+    >
+      <div
+        onClick={(e) => e.stopPropagation()}
+        style={{
+          width: "min(560px, 100%)",
+          background: "#fff",
+          borderRadius: 16,
+          padding: 18,
+          boxShadow: "0 18px 50px rgba(0,0,0,0.25)",
+          border: "1px solid #eee",
+        }}
+      >
+        <h3 style={{ margin: 0, fontSize: "1.15rem", fontWeight: 900 }}>{title}</h3>
+
+        <p style={{ marginTop: 10, marginBottom: 0, color: "#444", lineHeight: 1.35, whiteSpace: "pre-wrap" }}>
+          {message}
+        </p>
+
+        {error ? (
+          <div style={{ marginTop: 12, color: "#b00020", fontWeight: 900 }}>• {error}</div>
+        ) : null}
+
+        {success ? (
+          <div style={{ marginTop: 12, color: "#1b7f3a", fontWeight: 900 }}>✅ Acción realizada correctamente</div>
+        ) : null}
+
+        <div style={{ display: "flex", justifyContent: "flex-end", gap: 10, marginTop: 16 }}>
+          <button
+            type="button"
+            onClick={onCancel}
+            disabled={loading}
+            style={{
+              padding: "10px 14px",
+              borderRadius: 12,
+              border: "1px solid #ddd",
+              background: "#fff",
+              cursor: loading ? "not-allowed" : "pointer",
+              fontWeight: 900,
+              opacity: loading ? 0.6 : 1,
+            }}
+          >
+            {cancelText}
+          </button>
+
+          <button
+            type="button"
+            onClick={onConfirm}
+            disabled={loading || success}
+            style={{
+              padding: "10px 14px",
+              borderRadius: 12,
+              border: "1px solid #b00020",
+              background: "#b00020",
+              color: "#fff",
+              cursor: loading || success ? "not-allowed" : "pointer",
+              fontWeight: 900,
+              opacity: loading || success ? 0.6 : 1,
+            }}
+          >
+            {loading ? "Eliminando..." : confirmText}
+          </button>
+        </div>
+      </div>
+    </div>
+  );
+};
+
 const ModalMantEquipment = ({ equipoMant, setModalMantEquipment, setEquiposIniciales }) => {
   const [tab, setTab] = useState("PROGRAMAR");
   const [fecha, setFecha] = useState("");
@@ -133,6 +230,17 @@ const ModalMantEquipment = ({ equipoMant, setModalMantEquipment, setEquiposInici
   const [mantenimientos, setMantenimientos] = useState([]);
   const [loading, setLoading] = useState(false);
   const [apiError, setApiError] = useState("");
+
+  const [confirmDel, setConfirmDel] = useState({
+    open: false,
+    mode: null, // "ONE" | "BULK"
+    id: null,
+    estado: null,
+    title: "",
+    message: "",
+    success: false,
+    error: "",
+  });
 
   const handleClose = () => setModalMantEquipment(false);
 
@@ -204,6 +312,7 @@ const ModalMantEquipment = ({ equipoMant, setModalMantEquipment, setEquiposInici
     setApiError("");
     setMantenimientos([]);
     cargarMantenimientos();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [equipoMant?.id]);
 
   const crearItemsPayload = () => {
@@ -347,71 +456,118 @@ const ModalMantEquipment = ({ equipoMant, setModalMantEquipment, setEquiposInici
     }
   };
 
-  // ===========================
-  // BORRAR MANTENIMIENTOS
-  //
-  // ===========================
-  const eliminarMantenimiento = async (id) => {
-    if (!id) return;
-
-    const ok = window.confirm("¿Seguro que quieres borrar este mantenimiento? Esta acción no se puede deshacer.");
-    if (!ok) return;
-
-    setApiError("");
-    setLoading(true);
-    try {
-      const res = await fetch(`/api/mantenimientos/${id}`, {
-        method: "DELETE",
-        headers: { "Content-Type": "application/json" },
-        credentials: "include",
-      });
-
-      if (!res.ok) {
-        const txt = await res.text();
-        throw new Error(txt || `Error HTTP ${res.status}`);
-      }
-
-      if (editingId === id) cancelEdit();
-      await cargarMantenimientos();
-    } catch (e) {
-      setApiError(e?.message || "Failed to fetch");
-    } finally {
-      setLoading(false);
-    }
+ 
+  const closeConfirmDel = () => {
+    setConfirmDel({
+      open: false,
+      mode: null,
+      id: null,
+      estado: null,
+      title: "",
+      message: "",
+      success: false,
+      error: "",
+    });
   };
 
-  const borrarTodosPorEstado = async (estado) => {
-    if (!equipoMant?.id) return;
+  const openConfirmDeleteOne = (m) => {
+    const when = (m?.fechaProgramada || "").replace("T", " ").slice(0, 16);
+    const tipoTxt = prettyTipo(m?.tipo);
+    const estTxt = m?.estado || "";
 
+    const extra = [tipoTxt, when, estTxt].filter(Boolean).join(" • ");
+
+    setConfirmDel({
+      open: true,
+      mode: "ONE",
+      id: m?.id ?? null,
+      estado: null,
+      title: "Borrar mantenimiento",
+      message:
+        `¿Seguro que quieres borrar este mantenimiento?\n\n` +
+        (extra ? `(${extra})\n\n` : "") +
+        `Esta acción no se puede deshacer.`,
+      success: false,
+      error: "",
+    });
+  };
+
+  const openConfirmDeleteBulk = (estado) => {
     const label = estado === ESTADOS.PROGRAMADO ? "PROGRAMADOS" : "FINALIZADOS";
-    const ok = window.confirm(`¿Seguro que quieres borrar TODOS los mantenimientos ${label} de este equipo?`);
-    if (!ok) return;
+    setConfirmDel({
+      open: true,
+      mode: "BULK",
+      id: null,
+      estado,
+      title: `Borrar mantenimientos ${label}`,
+      message: `¿Seguro que quieres borrar TODOS los mantenimientos ${label} de este equipo?\n\nEsta acción no se puede deshacer.`,
+      success: false,
+      error: "",
+    });
+  };
 
+  const doEliminarMantenimiento = async (id) => {
+    const res = await fetch(`/api/mantenimientos/${id}`, {
+      method: "DELETE",
+      headers: { "Content-Type": "application/json" },
+      credentials: "include",
+    });
+
+    if (!res.ok) {
+      const txt = await res.text();
+      throw new Error(txt || `Error HTTP ${res.status}`);
+    }
+  };
+
+  const doBorrarTodosPorEstado = async (estado) => {
+    const res = await fetch(`/api/equipos_biomedicos/${equipoMant.id}/mantenimientos?estado=${estado}`, {
+      method: "DELETE",
+      headers: { "Content-Type": "application/json" },
+      credentials: "include",
+    });
+
+    if (!res.ok) {
+      const txt = await res.text();
+      throw new Error(txt || `Error HTTP ${res.status}`);
+    }
+  };
+
+  const handleConfirmDelete = async () => {
+    setConfirmDel((s) => ({ ...s, error: "", success: false }));
     setApiError("");
+
     setLoading(true);
     try {
-      const res = await fetch(`/api/equipos_biomedicos/${equipoMant.id}/mantenimientos?estado=${estado}`, {
-        method: "DELETE",
-        headers: { "Content-Type": "application/json" },
-        credentials: "include",
-      });
-
-      if (!res.ok) {
-        const txt = await res.text();
-        throw new Error(txt || `Error HTTP ${res.status}`);
+      if (confirmDel.mode === "ONE") {
+        const id = confirmDel.id;
+        if (!id) throw new Error("ID inválido para borrar");
+        await doEliminarMantenimiento(id);
+        if (editingId === id) cancelEdit();
+      } else if (confirmDel.mode === "BULK") {
+        const estado = confirmDel.estado;
+        if (!estado) throw new Error("Estado inválido para borrado masivo");
+        await doBorrarTodosPorEstado(estado);
+        cancelEdit();
       }
 
-      cancelEdit();
       await cargarMantenimientos();
+
+      setConfirmDel((s) => ({ ...s, success: true }));
+
+      setTimeout(() => {
+        closeConfirmDel();
+      }, 4000);
     } catch (e) {
-      setApiError(e?.message || "Failed to fetch");
+      const msg = e?.message || "Error al eliminar";
+      setConfirmDel((s) => ({ ...s, error: msg }));
+      setApiError(msg);
     } finally {
       setLoading(false);
     }
   };
 
-  const borrarTodosProgramados = () => borrarTodosPorEstado(ESTADOS.PROGRAMADO);
-  const borrarTodosFinalizados = () => borrarTodosPorEstado(ESTADOS.FINALIZADO);
+  const borrarTodosProgramados = () => openConfirmDeleteBulk(ESTADOS.PROGRAMADO);
+  const borrarTodosFinalizados = () => openConfirmDeleteBulk(ESTADOS.FINALIZADO);
 
   const startEdit = (m) => {
     setEditError("");
@@ -632,7 +788,7 @@ const ModalMantEquipment = ({ equipoMant, setModalMantEquipment, setEquiposInici
                     Finalizar todos
                   </button>
 
-                  {/*  borrar todos programados */}
+                  {/*  borrar todos programados (abre modal interno) */}
                   <button
                     type="button"
                     onClick={borrarTodosProgramados}
@@ -754,7 +910,15 @@ const ModalMantEquipment = ({ equipoMant, setModalMantEquipment, setEquiposInici
                         <div style={{ marginTop: 8, whiteSpace: "pre-wrap" }}>{h.descripcion}</div>
                       )}
 
-                      <div style={{ marginTop: 10, display: "flex", justifyContent: "flex-end", gap: 10, flexWrap: "wrap" }}>
+                      <div
+                        style={{
+                          marginTop: 10,
+                          display: "flex",
+                          justifyContent: "flex-end",
+                          gap: 10,
+                          flexWrap: "wrap",
+                        }}
+                      >
                         {isEditing ? (
                           <>
                             <button
@@ -827,10 +991,10 @@ const ModalMantEquipment = ({ equipoMant, setModalMantEquipment, setEquiposInici
                               Finalizar
                             </button>
 
-                            {/* ✅ NUEVO: borrar individual */}
+                            {/* borrar individual -> abre modal interno */}
                             <button
                               type="button"
-                              onClick={() => eliminarMantenimiento(h.id)}
+                              onClick={() => openConfirmDeleteOne(h)}
                               style={dangerBtn(loading)}
                               title="Borrar este mantenimiento"
                               disabled={loading}
@@ -845,10 +1009,18 @@ const ModalMantEquipment = ({ equipoMant, setModalMantEquipment, setEquiposInici
                 })
               )}
 
-              <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", gap: 12, marginTop: 18 }}>
+              <div
+                style={{
+                  display: "flex",
+                  alignItems: "center",
+                  justifyContent: "space-between",
+                  gap: 12,
+                  marginTop: 18,
+                }}
+              >
                 <SectionTitle>Historial (finalizados)</SectionTitle>
 
-                {/* borrar todos finalizados */}
+                {/* borrar todos finalizados -> abre modal interno */}
                 <button
                   type="button"
                   onClick={borrarTodosFinalizados}
@@ -889,11 +1061,11 @@ const ModalMantEquipment = ({ equipoMant, setModalMantEquipment, setEquiposInici
 
                     <div style={{ marginTop: 8, whiteSpace: "pre-wrap" }}>{h.descripcion}</div>
 
-                    {/* borrar individual finalizado */}
+                    {/* borrar individual finalizado -> abre modal interno */}
                     <div style={{ marginTop: 10, display: "flex", justifyContent: "flex-end" }}>
                       <button
                         type="button"
-                        onClick={() => eliminarMantenimiento(h.id)}
+                        onClick={() => openConfirmDeleteOne(h)}
                         style={dangerBtn(loading)}
                         disabled={loading}
                         title="Borrar este mantenimiento del historial"
@@ -923,6 +1095,20 @@ const ModalMantEquipment = ({ equipoMant, setModalMantEquipment, setEquiposInici
             </ButtonsContainer>
           </>
         )}
+
+        {/*  Modal interno de confirmación (sin alert/confirm del navegador) */}
+        <ConfirmDeleteModal
+          open={confirmDel.open}
+          title={confirmDel.title}
+          message={confirmDel.message}
+          loading={loading}
+          success={confirmDel.success}
+          error={confirmDel.error}
+          onCancel={closeConfirmDel}
+          onConfirm={handleConfirmDelete}
+          confirmText="Eliminar"
+          cancelText="Cancelar"
+        />
       </ModalContent>
     </ModalBackground>
   );
