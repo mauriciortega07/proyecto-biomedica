@@ -3,6 +3,6 @@
   publish = "build"
 
 [[redirects]]
-  from = "/api/*"
-  to = "http://ec2-3-87-154-111.compute-1.amazonaws.com/:splat"
-  status = 200
+  from = "/__ping"
+  to = "https://example.com"
+  status = 302
