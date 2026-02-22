@@ -4,6 +4,6 @@
 
 [[redirects]]
   from = "/api/*"
-  to = "http://ec2-3-87-154-111.compute-1.amazonaws.com/:splat"
+  to = "http://3.87.154.111/:splat"
   status = 200
   force = true
