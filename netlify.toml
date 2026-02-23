@@ -4,6 +4,6 @@
 
 [[redirects]]
   from = "/api/*"
-  to = "http://3.87.154.111/:splat"
+  to = "http://3.87.154.111.nip.io/api/:splat"
   status = 200
   force = true
