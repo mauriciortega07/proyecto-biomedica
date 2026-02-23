@@ -1,2 +1,2 @@
-/api/*  http://54.226.35.178:4000/:splat 200
-/* /index.html 200
+/api/*  https://backend-proyecto-biomedica-production-2f0d.up.railway.app/:splat  200!
+/*      /index.html  200
