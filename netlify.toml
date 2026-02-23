@@ -2,12 +2,14 @@
   command = "npm run build"
   publish = "build"
 
+# Reescribe /api/* hacia Railway, quitando el /api
 [[redirects]]
   from = "/api/*"
-  to = "http://3.87.154.111.nip.io/:splat"
+  to = "https://backend-proyecto-biomedica-production-2f0d.up.railway.app/:splat"
   status = 200
   force = true
 
+# SPA fallback
 [[redirects]]
   from = "/*"
   to = "/index.html"
